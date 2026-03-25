@@ -1,6 +1,6 @@
-title: "Truebird's Hack Lab"
-description: "해킹 & 보안 공부 블로그"
-url: "https://truebird0109.github.io"
+title: Truebird Hack Lab
+description: Hacking and Security Study Blog
+url: https://truebird0109.github.io
 baseurl: ""
 
 markdown: kramdown
@@ -8,14 +8,14 @@ highlighter: rouge
 
 kramdown:
   input: GFM
-    syntax_highlighter: rouge
+  syntax_highlighter: rouge
 
-    permalink: /:year/:month/:day/:title/
+permalink: /:year/:month/:day/:title/
 
-    defaults:
-      - scope:
-            path: ""
-                  type: "posts"
-                      values:
-                            layout: "post"
-                                  comments: true
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+      comments: true
