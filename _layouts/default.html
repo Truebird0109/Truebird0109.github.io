@@ -1,226 +1,99 @@
 <!DOCTYPE html>
 <html lang="ko" data-theme="dark">
-  <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>{% if page.title %}{{ page.title }} - {% endif %}{{ site.title }}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=DotGothic16&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
-    <style>
-          :root {
-                  --bg: #0a0a0f;
-                  --bg2: #12121a;
-                  --card: #1a1a25;
-                  --border: #2a2a3a;
-                  --text: #c8c8d0;
-                  --text2: #888898;
-                  --accent: #00ff41;
-                  --accent2: #00cc33;
-                  --link: #00ff41;
-                  --code-bg: #0d0d15;
-                  --tag-bg: #1a2a1a;
-                  --tag-text: #00ff41;
-          }
-          [data-theme="light"] {
-                  --bg: #f0f0e8;
-                  --bg2: #e8e8e0;
-                  --card: #ffffff;
-                  --border: #c0c0b0;
-                  --text: #1a1a1a;
-                  --text2: #666660;
-                  --accent: #006620;
-                  --accent2: #004d18;
-                  --link: #006620;
-                  --code-bg: #f5f5f0;
-                  --tag-bg: #e0f0e0;
-                  --tag-text: #006620;
-          }
-          * { margin: 0; padding: 0; box-sizing: border-box; }
-          body {
-                  font-family: 'DotGothic16', monospace;
-                  background: var(--bg);
-                  color: var(--text);
-                  line-height: 1.8;
-                  transition: background 0.3s, color 0.3s;
-          }
-          header {
-                  border-bottom: 2px dashed var(--accent);
-                  padding: 20px;
-                  display: flex;
-                  justify-content: space-between;
-                  align-items: center;
-                  max-width: 900px;
-                  margin: 0 auto;
-          }
-          header .logo {
-                  font-family: 'Press Start 2P', cursive;
-                  font-size: 0.9em;
-                  color: var(--accent);
-                  text-decoration: none;
-          }
-          header .logo:hover { text-shadow: 0 0 8px var(--accent); }
-          .header-right { display: flex; align-items: center; gap: 15px; }
-          nav a {
-                  color: var(--text2);
-                  text-decoration: none;
-                  font-size: 0.85em;
-                  padding: 4px 8px;
-                  border: 1px solid transparent;
-          }
-          nav a:hover {
-                  color: var(--accent);
-                  border-color: var(--accent);
-          }
-          .theme-toggle {
-                  background: var(--card);
-                  border: 2px solid var(--border);
-                  color: var(--accent);
-                  padding: 6px 10px;
-                  cursor: pointer;
-                  font-family: 'Press Start 2P', cursive;
-                  font-size: 0.6em;
-                  transition: all 0.3s;
-          }
-          .theme-toggle:hover {
-                  border-color: var(--accent);
-                  box-shadow: 0 0 8px var(--accent);
-          }
-          main {
-                  max-width: 900px;
-                  margin: 0 auto;
-                  padding: 30px 20px;
-                  min-height: 70vh;
-          }
-          footer {
-                  border-top: 2px dashed var(--border);
-                  padding: 20px;
-                  text-align: center;
-                  color: var(--text2);
-                  font-size: 0.75em;
-                  max-width: 900px;
-                  margin: 0 auto;
-          }
-          footer .prompt::before { content: "> "; color: var(--accent); }
-          a { color: var(--link); }
-          h1, h2, h3 { font-family: 'Press Start 2P', cursive; line-height: 1.6; }
-          h1 { font-size: 1.1em; margin-bottom: 15px; color: var(--accent); }
-          h2 { font-size: 0.9em; margin: 25px 0 10px; color: var(--accent); }
-          h3 { font-size: 0.8em; margin: 20px 0 8px; }
-          p { margin-bottom: 15px; }
-          code {
-                  font-family: 'DotGothic16', monospace;
-                  background: var(--code-bg);
-                  padding: 2px 6px;
-                  border: 1px solid var(--border);
-                  font-size: 0.9em;
-          }
-          pre {
-                  background: var(--code-bg);
-                  border: 2px solid var(--border);
-                  padding: 15px;
-                  overflow-x: auto;
-                  margin: 15px 0;
-                  line-height: 1.5;
-          }
-          pre code { border: none; padding: 0; background: none; }
-          blockquote {
-                  border-left: 4px solid var(--accent);
-                  padding: 10px 15px;
-                  margin: 15px 0;
-                  background: var(--bg2);
-                  color: var(--text2);
-          }
-          ul, ol { margin: 10px 0 15px 25px; }
-          li { margin-bottom: 5px; }
-          img { max-width: 100%; border: 2px solid var(--border); margin: 10px 0; }
-          table { width: 100%; border-collapse: collapse; margin: 15px 0; }
-          th, td { border: 1px solid var(--border); padding: 8px 12px; text-align: left; }
-          th { background: var(--bg2); color: var(--accent); }
-          .post-card {
-                  background: var(--card);
-                  border: 2px solid var(--border);
-                  padding: 20px;
-                  margin-bottom: 15px;
-                  transition: all 0.3s;
-          }
-          .post-card:hover {
-                  border-color: var(--accent);
-                  box-shadow: 0 0 10px rgba(0,255,65,0.1);
-          }
-          .post-card h2 { margin: 0 0 8px; }
-          .post-card h2 a { color: var(--accent); text-decoration: none; }
-          .post-card h2 a:hover { text-shadow: 0 0 5px var(--accent); }
-          .post-meta { color: var(--text2); font-size: 0.8em; margin-bottom: 10px; }
-          .post-meta::before { content: "$ "; color: var(--accent); }
-          .post-tags { margin-top: 10px; }
-          .tag {
-                  display: inline-block;
-                  background: var(--tag-bg);
-                  color: var(--tag-text);
-                  padding: 2px 8px;
-                  margin: 2px;
-                  font-size: 0.75em;
-                  border: 1px solid var(--tag-text);
-          }
-          .post-header { margin-bottom: 30px; padding-bottom: 15px; border-bottom: 2px dashed var(--border); }
-          .post-content { font-size: 0.95em; }
-          .comments-section { margin-top: 40px; padding-top: 20px; border-top: 2px dashed var(--border); }
-          .back-link { display: inline-block; margin-bottom: 20px; font-size: 0.85em; }
-          .back-link::before { content: "< "; }
-          @media (max-width: 600px) {
-                  header { flex-direction: column; gap: 10px; text-align: center; }
-                  .header-right { flex-wrap: wrap; justify-content: center; }
-                  h1 { font-size: 0.9em; }
-          }
-        </style>
-  </head>
-  <body>
-      <header>
-            <a href="/" class="logo">> Truebird's_Hack_Lab</a>a>
-            <div class="header-right">
-                    <nav>
-                              <a href="/">Home</a>a>
-                              <a href="/about">About</a>a>
-                    </nav>
-                    <button class="theme-toggle" onclick="toggleTheme()">DARK</button>button>
-            </div>div>
-      </header>
-      <main>
-            {{ content }}
-      </main>
-      <footer>
-            <p class="prompt">Truebird0109 | Hacking & Security Study Blog | 2026</p>p>
-      </footer>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-      <script>
-            hljs.highlightAll();
-            function toggleTheme() {
-                    const html = document.documentElement;
-                    const btn = document.querySelector('.theme-toggle');
-                    if (html.getAttribute('data-theme') === 'dark') {
-                              html.setAttribute('data-theme', 'light');
-                              btn.textContent = 'LIGHT';
-                              localStorage.setItem('theme', 'light');
-                    } else {
-                              html.setAttribute('data-theme', 'dark');
-                              btn.textContent = 'DARK';
-                              localStorage.setItem('theme', 'dark');
-                    }
-            }
-            (function() {
-                    const saved = localStorage.getItem('theme') || 'dark';
-                    document.documentElement.setAttribute('data-theme', saved);
-                    const btn = document.querySelector('.theme-toggle');
-                    if (btn) btn.textContent = saved === 'dark' ? 'DARK' : 'LIGHT';
-            })();
-      </script>
-  </body>
-</html>html>
-      </script>
-      </footer>
-      </main>
-                    </nav>
-      </header>
-  </body>
-    </style></title>
-  </head>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% if page.title %}{{ page.title }} - {% endif %}{{ site.title }}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=DotGothic16&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+  <style>
+    :root{--bg:#0a0a0f;--bg2:#12121a;--card:#1a1a25;--border:#2a2a3a;--text:#c8c8d0;--text2:#888898;--accent:#00ff41;--link:#00ff41;--code-bg:#0d0d15;--tag-bg:#1a2a1a;--tag-text:#00ff41;}
+    [data-theme="light"]{--bg:#f0f0e8;--bg2:#e8e8e0;--card:#ffffff;--border:#c0c0b0;--text:#1a1a1a;--text2:#666660;--accent:#006620;--link:#006620;--code-bg:#f5f5f0;--tag-bg:#e0f0e0;--tag-text:#006620;}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'DotGothic16',monospace;background:var(--bg);color:var(--text);line-height:1.8;transition:background 0.3s,color 0.3s;}
+    header{border-bottom:2px dashed var(--accent);padding:20px;display:flex;justify-content:space-between;align-items:center;max-width:900px;margin:0 auto;}
+    header .logo{font-family:'Press Start 2P',cursive;font-size:0.9em;color:var(--accent);text-decoration:none;}
+    header .logo:hover{text-shadow:0 0 8px var(--accent);}
+    .header-right{display:flex;align-items:center;gap:15px;}
+    nav a{color:var(--text2);text-decoration:none;font-size:0.85em;padding:4px 8px;border:1px solid transparent;}
+    nav a:hover{color:var(--accent);border-color:var(--accent);}
+    .theme-toggle{background:var(--card);border:2px solid var(--border);color:var(--accent);padding:6px 10px;cursor:pointer;font-family:'Press Start 2P',cursive;font-size:0.6em;transition:all 0.3s;}
+    .theme-toggle:hover{border-color:var(--accent);box-shadow:0 0 8px var(--accent);}
+    main{max-width:900px;margin:0 auto;padding:30px 20px;min-height:70vh;}
+    footer{border-top:2px dashed var(--border);padding:20px;text-align:center;color:var(--text2);font-size:0.75em;max-width:900px;margin:0 auto;}
+    footer .prompt::before{content:"> ";color:var(--accent);}
+    a{color:var(--link);}
+    h1,h2,h3{font-family:'Press Start 2P',cursive;line-height:1.6;}
+    h1{font-size:1.1em;margin-bottom:15px;color:var(--accent);}
+    h2{font-size:0.9em;margin:25px 0 10px;color:var(--accent);}
+    h3{font-size:0.8em;margin:20px 0 8px;}
+    p{margin-bottom:15px;}
+    code{font-family:'DotGothic16',monospace;background:var(--code-bg);padding:2px 6px;border:1px solid var(--border);font-size:0.9em;}
+    pre{background:var(--code-bg);border:2px solid var(--border);padding:15px;overflow-x:auto;margin:15px 0;line-height:1.5;}
+    pre code{border:none;padding:0;background:none;}
+    blockquote{border-left:4px solid var(--accent);padding:10px 15px;margin:15px 0;background:var(--bg2);color:var(--text2);}
+    ul,ol{margin:10px 0 15px 25px;}
+    li{margin-bottom:5px;}
+    img{max-width:100%;border:2px solid var(--border);margin:10px 0;}
+    table{width:100%;border-collapse:collapse;margin:15px 0;}
+    th,td{border:1px solid var(--border);padding:8px 12px;text-align:left;}
+    th{background:var(--bg2);color:var(--accent);}
+    .post-card{background:var(--card);border:2px solid var(--border);padding:20px;margin-bottom:15px;transition:all 0.3s;}
+    .post-card:hover{border-color:var(--accent);box-shadow:0 0 10px rgba(0,255,65,0.1);}
+    .post-card h2{margin:0 0 8px;}
+    .post-card h2 a{color:var(--accent);text-decoration:none;}
+    .post-card h2 a:hover{text-shadow:0 0 5px var(--accent);}
+    .post-meta{color:var(--text2);font-size:0.8em;margin-bottom:10px;}
+    .post-meta::before{content:"$ ";color:var(--accent);}
+    .post-tags{margin-top:10px;}
+    .tag{display:inline-block;background:var(--tag-bg);color:var(--tag-text);padding:2px 8px;margin:2px;font-size:0.75em;border:1px solid var(--tag-text);}
+    .post-header{margin-bottom:30px;padding-bottom:15px;border-bottom:2px dashed var(--border);}
+    .post-content{font-size:0.95em;}
+    .comments-section{margin-top:40px;padding-top:20px;border-top:2px dashed var(--border);}
+    .back-link{display:inline-block;margin-bottom:20px;font-size:0.85em;}
+    .back-link::before{content:"< ";}
+    @media(max-width:600px){header{flex-direction:column;gap:10px;text-align:center;}.header-right{flex-wrap:wrap;justify-content:center;}h1{font-size:0.9em;}}
+  </style>
+</head>
+<body>
+  <header>
+    <a href="/" class="logo">&gt; Truebird's_Hack_Lab</a>
+    <div class="header-right">
+      <nav>
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+      </nav>
+      <button class="theme-toggle" onclick="toggleTheme()">DARK</button>
+    </div>
+  </header>
+  <main>
+    {{ content }}
+  </main>
+  <footer>
+    <p class="prompt">Truebird0109 | Hacking &amp; Security Study Blog | 2026</p>
+  </footer>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>
+    hljs.highlightAll();
+    function toggleTheme(){
+      var h=document.documentElement;
+      var b=document.querySelector('.theme-toggle');
+      if(h.getAttribute('data-theme')==='dark'){
+        h.setAttribute('data-theme','light');
+        b.textContent='LIGHT';
+        localStorage.setItem('theme','light');
+      }else{
+        h.setAttribute('data-theme','dark');
+        b.textContent='DARK';
+        localStorage.setItem('theme','dark');
+      }
+    }
+    (function(){
+      var s=localStorage.getItem('theme')||'dark';
+      document.documentElement.setAttribute('data-theme',s);
+      var b=document.querySelector('.theme-toggle');
+      if(b) b.textContent=s==='dark'?'DARK':'LIGHT';
+    })();
+  </script>
+</body>
+</html>
