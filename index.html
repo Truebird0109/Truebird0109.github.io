@@ -233,7 +233,7 @@ title: Home
       renderPosts(cat);
 
       document.getElementById('selected-layout').style.display = 'flex';
-      document.getElementById('cmd-prompt').textContent = 'C:\\blog> cat ' + cat + '/';
+      document.getElementById('cmd-prompt').textContent = 'C:\\blog> ls ' + cat + '/';
     }, 200);
   }
 
@@ -243,7 +243,7 @@ title: Home
     var info = CATS.find(function(x){ return x.cat === cat; });
     document.getElementById('sel-icon').textContent = info.icon;
     document.getElementById('sel-name').textContent = '->' + ' ' + info.label;
-    document.getElementById('cmd-prompt').textContent = 'C:\\blog> cat ' + cat + '/';
+    document.getElementById('cmd-prompt').textContent = 'C:\\blog> ls ' + cat + '/';
     document.querySelectorAll('.sidebar-btn').forEach(function(b){
       b.classList.toggle('active', b.dataset.cat === cat);
     });
