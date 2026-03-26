@@ -87,9 +87,14 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
   <script>
     hljs.highlightAll();
-    /* intro animation disabled
     (function(){
       var overlay=document.getElementById('intro-overlay');
+      if(!overlay) return;
+      if(sessionStorage.getItem('intro_shown')){
+        overlay.style.display='none';
+        return;
+      }
+      sessionStorage.setItem('intro_shown','1');
       var typed=document.getElementById('intro-typed');
       var sub=document.getElementById('intro-sub');
       var text='truebird';
@@ -108,9 +113,6 @@
       }
       setTimeout(type,300);
     })();
-    */
-    var overlay=document.getElementById('intro-overlay');
-    if(overlay) overlay.style.display='none';
     function toggleTheme(){
       var h=document.documentElement;
       var b=document.querySelector('.theme-toggle');
