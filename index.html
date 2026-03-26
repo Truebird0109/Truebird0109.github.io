@@ -2,34 +2,291 @@
 layout: default
 title: Home
 ---
-<div style="margin-bottom:30px;padding:15px;border:2px solid var(--accent);background:var(--bg2);">
+<div style="margin-bottom:24px;padding:15px;border:2px solid var(--accent);background:var(--bg2);">
   <p style="font-family:'Press Start 2P',cursive;font-size:0.7em;color:var(--accent);margin-bottom:8px;">&gt; whoami</p>
   <p style="margin:0;">해킹 &amp; 보안을 공부하며 배운 것들을 기록하는 블로그입니다. CTF, 웹 해킹, 시스템 해킹, 리버싱 등 다양한 주제를 다룹니다.</p>
 </div>
 
-<h1>&gt; recent_posts</h1>
+<p style="font-family:'Press Start 2P',cursive;font-size:0.65em;color:var(--accent);margin-bottom:16px;" id="cmd-prompt">C:\blog&gt; ls categories/</p>
 
-{% for post in site.posts %}
-<div class="post-card">
-  <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
-  <div class="post-meta">{{ post.date | date: "%Y-%m-%d" }}{% if post.categories %} | {{ post.categories | join: ", " }}{% endif %}</div>
-  {% if post.excerpt %}
-  <p style="color:var(--text2);margin-top:8px;">{{ post.excerpt | strip_html | truncate: 150 }}</p>
-  {% endif %}
-  {% if post.tags %}
-  <div class="post-tags">
-    {% for tag in post.tags %}
-    <span class="tag">#{{ tag }}</span>
-    {% endfor %}
+<div id="cat-wrapper">
+  <!-- 카테고리 그리드 -->
+  <div id="cat-grid-area">
+    <div class="cat-grid" id="cat-grid">
+      <div class="cat-card" data-cat="web-hacking" data-label="웹 해킹" data-icon="[WEB]">
+        <div class="cat-icon">[WEB]</div>
+        <div class="cat-name">-&gt; Web Hacking</div>
+        <div class="cat-count" id="cnt-web-hacking">
+          {% assign c=0 %}{% for p in site.posts %}{% if p.categories contains 'web-hacking' %}{% assign c=c|plus:1 %}{% endif %}{% endfor %}{{ c }} posts
+        </div>
+        <div class="cat-arrow">&#9654;</div>
+      </div>
+      <div class="cat-card" data-cat="forensics" data-label="포렌식" data-icon="[FOR]">
+        <div class="cat-icon">[FOR]</div>
+        <div class="cat-name">-&gt; Forensics</div>
+        <div class="cat-count">
+          {% assign c=0 %}{% for p in site.posts %}{% if p.categories contains 'forensics' %}{% assign c=c|plus:1 %}{% endif %}{% endfor %}{{ c }} posts
+        </div>
+        <div class="cat-arrow">&#9654;</div>
+      </div>
+      <div class="cat-card" data-cat="penetration-testing" data-label="Penetration Testing" data-icon="[PEN]">
+        <div class="cat-icon">[PEN]</div>
+        <div class="cat-name">-&gt; Penetration Testing</div>
+        <div class="cat-count">
+          {% assign c=0 %}{% for p in site.posts %}{% if p.categories contains 'penetration-testing' %}{% assign c=c|plus:1 %}{% endif %}{% endfor %}{{ c }} posts
+        </div>
+        <div class="cat-arrow">&#9654;</div>
+      </div>
+      <div class="cat-card" data-cat="wargame" data-label="Wargame" data-icon="[WAR]">
+        <div class="cat-icon">[WAR]</div>
+        <div class="cat-name">-&gt; Wargame</div>
+        <div class="cat-count">
+          {% assign c=0 %}{% for p in site.posts %}{% if p.categories contains 'wargame' %}{% assign c=c|plus:1 %}{% endif %}{% endfor %}{{ c }} posts
+        </div>
+        <div class="cat-arrow">&#9654;</div>
+      </div>
+      <div class="cat-card" data-cat="etc" data-label="ETC" data-icon="[ETC]">
+        <div class="cat-icon">[ETC]</div>
+        <div class="cat-name">-&gt; ETC</div>
+        <div class="cat-count">
+          {% assign c=0 %}{% for p in site.posts %}{% if p.categories contains 'etc' %}{% assign c=c|plus:1 %}{% endif %}{% endfor %}{{ c }} posts
+        </div>
+        <div class="cat-arrow">&#9654;</div>
+      </div>
+    </div>
   </div>
-  {% endif %}
-</div>
-{% endfor %}
 
-{% if site.posts.size == 0 %}
-<div class="post-card" style="text-align:center;color:var(--text2);">
-  <p style="font-family:'Press Start 2P',cursive;font-size:0.7em;">$ ls posts/</p>
-  <p style="margin-top:10px;">아직 작성된 포스트가 없습니다.</p>
-  <p style="font-size:0.85em;">_posts 폴더에 마크다운 파일을 추가해주세요!</p>
+  <!-- 선택 후 레이아웃 -->
+  <div id="selected-layout" style="display:none;">
+    <!-- 좌측: 선택된 카드 + 게시판 -->
+    <div id="selected-left">
+      <div id="selected-card">
+        <div id="sel-icon" class="cat-icon"></div>
+        <div id="sel-name" class="cat-name"></div>
+        <div id="sel-count" class="cat-count"></div>
+      </div>
+      <div id="post-list">
+        <div id="post-list-inner">
+          {% for post in site.posts %}
+          <a class="post-row" href="{{ post.url }}" data-cat="{{ post.categories | join: ' ' | downcase }}">
+            <span class="post-row-prompt">$</span>
+            <span class="post-row-title">{{ post.title }}</span>
+            <span class="post-row-date">{{ post.date | date: "%Y-%m-%d" }}</span>
+          </a>
+          {% endfor %}
+          <div id="no-posts" style="display:none;">
+            <span style="color:var(--text2);font-size:0.85em;">아직 포스트가 없습니다.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 우측: 나머지 카테고리 사이드바 -->
+    <div id="cat-sidebar"></div>
+  </div>
 </div>
-{% endif %}
+
+<style>
+  /* 기본 그리드 */
+  .cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  @media(max-width:600px){.cat-grid{grid-template-columns:1fr 1fr;}}
+
+  .cat-card{
+    background:var(--card);border:2px solid var(--border);
+    padding:22px 18px;cursor:pointer;
+    transition:border-color 0.2s,box-shadow 0.2s,transform 0.18s ease-in,opacity 0.18s ease-in;
+    position:relative;overflow:hidden;
+  }
+  .cat-card:hover{border-color:var(--accent);box-shadow:0 0 14px rgba(0,255,65,0.15);}
+  .cat-card.fly-out{transform:translateX(160%);opacity:0;}
+  .cat-card.fly-in{transform:translateX(160%);opacity:0;}
+  .cat-card.fly-in-active{transform:translateX(0);opacity:1;}
+  .cat-icon{font-family:'Press Start 2P',cursive;font-size:0.6em;color:var(--text2);margin-bottom:10px;}
+  .cat-name{font-family:'Press Start 2P',cursive;font-size:0.65em;color:var(--text);line-height:1.8;margin-bottom:10px;}
+  .cat-count{font-family:'Pretendard',sans-serif;font-size:0.8em;color:var(--text2);}
+  .cat-arrow{position:absolute;right:14px;bottom:14px;color:var(--border);font-size:0.9em;transition:color 0.2s;}
+  .cat-card:hover .cat-arrow{color:var(--accent);}
+
+  /* 선택 후 레이아웃 */
+  #selected-layout{display:flex;gap:16px;align-items:flex-start;}
+  #selected-left{flex:1;min-width:0;}
+
+  #selected-card{
+    background:var(--card);border:2px solid var(--accent);
+    padding:22px 20px;margin-bottom:0;
+    box-shadow:0 0 16px rgba(0,255,65,0.12);
+    animation:expandIn 0.25s ease-out;
+  }
+  #selected-card .cat-icon{color:var(--accent);}
+  #selected-card .cat-name{color:var(--accent);}
+  @keyframes expandIn{from{transform:scale(0.96);opacity:0.6;}to{transform:scale(1);opacity:1;}}
+
+  /* 게시판 */
+  #post-list{
+    border:2px solid var(--border);border-top:none;
+    background:var(--bg2);
+    animation:fadeSlideIn 0.3s ease-out;
+  }
+  @keyframes fadeSlideIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+  .post-row{
+    display:flex;align-items:center;gap:10px;
+    padding:10px 16px;
+    border-bottom:1px solid var(--border);
+    text-decoration:none;color:var(--text);
+    transition:background 0.15s,color 0.15s;
+    font-family:'Pretendard',sans-serif;font-size:0.9em;
+  }
+  .post-row:last-child{border-bottom:none;}
+  .post-row:hover{background:var(--card);color:var(--accent);}
+  .post-row:hover .post-row-prompt{color:var(--accent);}
+  .post-row-prompt{color:var(--text2);font-size:0.85em;flex-shrink:0;}
+  .post-row-title{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .post-row-date{color:var(--text2);font-size:0.78em;flex-shrink:0;}
+
+  /* 사이드바 */
+  #cat-sidebar{
+    display:flex;flex-direction:column;gap:8px;
+    width:140px;flex-shrink:0;
+    animation:slideInRight 0.22s ease-out;
+  }
+  @keyframes slideInRight{from{opacity:0;transform:translateX(30px);}to{opacity:1;transform:translateX(0);}}
+  .sidebar-btn{
+    background:var(--card);border:1px solid var(--border);
+    padding:10px 12px;cursor:pointer;
+    font-family:'Press Start 2P',cursive;font-size:0.55em;
+    color:var(--text2);text-align:left;
+    transition:all 0.15s;line-height:1.8;
+  }
+  .sidebar-btn:hover,.sidebar-btn.active{
+    border-color:var(--accent);color:var(--accent);
+    background:var(--bg2);
+  }
+  #back-btn{
+    background:none;border:1px solid var(--border);
+    padding:8px 12px;cursor:pointer;
+    font-family:'Pretendard',sans-serif;font-size:0.8em;
+    color:var(--text2);width:100%;text-align:left;
+    transition:all 0.15s;margin-bottom:4px;
+  }
+  #back-btn:hover{border-color:var(--accent);color:var(--accent);}
+</style>
+
+<script>
+  var CATS = [
+    {cat:'web-hacking',  label:'Web Hacking',          icon:'[WEB]'},
+    {cat:'forensics',    label:'Forensics',            icon:'[FOR]'},
+    {cat:'penetration-testing', label:'Penetration Testing', icon:'[PEN]'},
+    {cat:'wargame',      label:'Wargame',              icon:'[WAR]'},
+    {cat:'etc',          label:'ETC',                  icon:'[ETC]'}
+  ];
+
+  var currentCat = null;
+
+  document.querySelectorAll('.cat-card').forEach(function(card){
+    card.addEventListener('click', function(){
+      selectCat(card.dataset.cat);
+    });
+  });
+
+  function selectCat(cat) {
+    if(currentCat === cat) return;
+    currentCat = cat;
+
+    var cards = document.querySelectorAll('.cat-card');
+    var selData = null;
+
+    // 선택 안된 카드 우측으로 날리기
+    cards.forEach(function(c){
+      if(c.dataset.cat !== cat){
+        c.classList.add('fly-out');
+      } else {
+        selData = {
+          icon: c.querySelector('.cat-icon').textContent,
+          name: c.querySelector('.cat-name').textContent,
+          count: c.querySelector('.cat-count').textContent.trim()
+        };
+      }
+    });
+
+    // 애니메이션 후 레이아웃 전환
+    setTimeout(function(){
+      document.getElementById('cat-grid-area').style.display = 'none';
+      cards.forEach(function(c){ c.classList.remove('fly-out'); });
+
+      // 선택된 카드 정보 채우기
+      document.getElementById('sel-icon').textContent = selData.icon;
+      document.getElementById('sel-name').textContent = selData.name;
+      document.getElementById('sel-count').textContent = selData.count;
+
+      // 사이드바 채우기
+      var sidebar = document.getElementById('cat-sidebar');
+      sidebar.innerHTML = '<button id="back-btn" onclick="goBack()">&lt; 목록으로</button>';
+      CATS.forEach(function(item){
+        var btn = document.createElement('button');
+        btn.className = 'sidebar-btn' + (item.cat === cat ? ' active' : '');
+        btn.textContent = item.icon + '\n-> ' + item.label;
+        btn.dataset.cat = item.cat;
+        btn.addEventListener('click', function(){ switchCat(item.cat); });
+        sidebar.appendChild(btn);
+      });
+
+      // 포스트 필터
+      renderPosts(cat);
+
+      document.getElementById('selected-layout').style.display = 'flex';
+      document.getElementById('cmd-prompt').textContent = 'C:\\blog> cat ' + cat + '/';
+    }, 200);
+  }
+
+  function switchCat(cat) {
+    if(currentCat === cat) return;
+    currentCat = cat;
+    var info = CATS.find(function(x){ return x.cat === cat; });
+    document.getElementById('sel-icon').textContent = info.icon;
+    document.getElementById('sel-name').textContent = '->' + ' ' + info.label;
+    document.getElementById('cmd-prompt').textContent = 'C:\\blog> cat ' + cat + '/';
+    document.querySelectorAll('.sidebar-btn').forEach(function(b){
+      b.classList.toggle('active', b.dataset.cat === cat);
+    });
+    renderPosts(cat);
+  }
+
+  function renderPosts(cat) {
+    var rows = document.querySelectorAll('.post-row');
+    var visible = 0;
+    rows.forEach(function(row){
+      var show = row.dataset.cat.indexOf(cat) !== -1;
+      row.style.display = show ? '' : 'none';
+      if(show) visible++;
+    });
+    document.getElementById('sel-count').textContent = visible + ' posts';
+    document.getElementById('no-posts').style.display = visible === 0 ? '' : 'none';
+  }
+
+  function goBack() {
+    currentCat = null;
+    document.getElementById('selected-layout').style.display = 'none';
+
+    var area = document.getElementById('cat-grid-area');
+    area.style.display = '';
+    document.getElementById('cmd-prompt').textContent = 'C:\\blog> ls categories/';
+
+    // 카드들 우측에서 원위치로 복귀
+    var cards = document.querySelectorAll('.cat-card');
+    cards.forEach(function(c){
+      c.classList.remove('fly-out','fly-in-active');
+      c.classList.add('fly-in');
+    });
+    // 한 프레임 뒤에 active 클래스로 트랜지션 시작
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        cards.forEach(function(c){
+          c.classList.remove('fly-in');
+          c.classList.add('fly-in-active');
+        });
+        setTimeout(function(){
+          cards.forEach(function(c){ c.classList.remove('fly-in-active'); });
+        }, 250);
+      });
+    });
+  }
+</script>

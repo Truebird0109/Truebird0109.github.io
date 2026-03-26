@@ -4,13 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% if page.title %}{{ page.title }} - {% endif %}{{ site.title }}</title>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=DotGothic16&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
   <style>
     :root{--bg:#0a0a0f;--bg2:#12121a;--card:#1a1a25;--border:#2a2a3a;--text:#c8c8d0;--text2:#888898;--accent:#00ff41;--link:#00ff41;--code-bg:#0d0d15;--tag-bg:#1a2a1a;--tag-text:#00ff41;}
     [data-theme="light"]{--bg:#f0f0e8;--bg2:#e8e8e0;--card:#ffffff;--border:#c0c0b0;--text:#1a1a1a;--text2:#666660;--accent:#006620;--link:#006620;--code-bg:#f5f5f0;--tag-bg:#e0f0e0;--tag-text:#006620;}
+    #intro-overlay{position:fixed;inset:0;background:#0a0a0f;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity 0.6s ease;}
+    #intro-overlay.fade-out{opacity:0;pointer-events:none;}
+    #intro-text{font-family:'Press Start 2P',cursive;font-size:2em;color:#00ff41;text-shadow:0 0 20px #00ff41,0 0 40px #00ff41;letter-spacing:0.1em;}
+    #intro-cursor{display:inline-block;width:2px;height:1.1em;background:#00ff41;margin-left:4px;vertical-align:middle;animation:blink 0.7s step-end infinite;}
+    #intro-sub{font-family:'Pretendard',sans-serif;font-size:0.75em;color:#888898;margin-top:18px;opacity:0;transition:opacity 0.5s;}
+    @keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
     *{margin:0;padding:0;box-sizing:border-box;}
-    body{font-family:'DotGothic16',monospace;background:var(--bg);color:var(--text);line-height:1.8;transition:background 0.3s,color 0.3s;}
+    body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);line-height:1.8;transition:background 0.3s,color 0.3s;}
     header{border-bottom:2px dashed var(--accent);padding:20px;display:flex;justify-content:space-between;align-items:center;max-width:900px;margin:0 auto;}
     header .logo{font-family:'Press Start 2P',cursive;font-size:0.9em;color:var(--accent);text-decoration:none;}
     header .logo:hover{text-shadow:0 0 8px var(--accent);}
@@ -23,12 +30,13 @@
     footer{border-top:2px dashed var(--border);padding:20px;text-align:center;color:var(--text2);font-size:0.75em;max-width:900px;margin:0 auto;}
     footer .prompt::before{content:"> ";color:var(--accent);}
     a{color:var(--link);}
-    h1,h2,h3{font-family:'Press Start 2P',cursive;line-height:1.6;}
-    h1{font-size:1.1em;margin-bottom:15px;color:var(--accent);}
-    h2{font-size:0.9em;margin:25px 0 10px;color:var(--accent);}
-    h3{font-size:0.8em;margin:20px 0 8px;}
+    h1,h2,h3,h4{font-family:'Pretendard',sans-serif;line-height:1.5;}
+    h1{font-weight:700;font-size:1.4em;margin-bottom:15px;color:var(--accent);}
+    h2{font-weight:700;font-size:1.2em;margin:28px 0 10px;color:var(--accent);}
+    h3{font-weight:600;font-size:1.05em;margin:20px 0 8px;}
+    h4{font-weight:600;font-size:0.95em;margin:15px 0 6px;}
     p{margin-bottom:15px;}
-    code{font-family:'DotGothic16',monospace;background:var(--code-bg);padding:2px 6px;border:1px solid var(--border);font-size:0.9em;}
+    code{font-family:'Pretendard',sans-serif;background:var(--code-bg);padding:2px 6px;border:1px solid var(--border);font-size:0.9em;}
     pre{background:var(--code-bg);border:2px solid var(--border);padding:15px;overflow-x:auto;margin:15px 0;line-height:1.5;}
     pre code{border:none;padding:0;background:none;}
     blockquote{border-left:4px solid var(--accent);padding:10px 15px;margin:15px 0;background:var(--bg2);color:var(--text2);}
@@ -56,6 +64,10 @@
   </style>
 </head>
 <body>
+  <div id="intro-overlay">
+    <div id="intro-text"><span id="intro-typed"></span><span id="intro-cursor"></span></div>
+    <div id="intro-sub">Hacking &amp; Security Study Blog</div>
+  </div>
   <header>
     <a href="/" class="logo">&gt; Truebird's_Hack_Lab</a>
     <div class="header-right">
@@ -75,6 +87,30 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
   <script>
     hljs.highlightAll();
+    /* intro animation disabled
+    (function(){
+      var overlay=document.getElementById('intro-overlay');
+      var typed=document.getElementById('intro-typed');
+      var sub=document.getElementById('intro-sub');
+      var text='truebird';
+      var i=0;
+      function type(){
+        if(i<text.length){
+          typed.textContent+=text[i++];
+          setTimeout(type,120);
+        }else{
+          sub.style.opacity='1';
+          setTimeout(function(){
+            overlay.classList.add('fade-out');
+            setTimeout(function(){overlay.style.display='none';},650);
+          },700);
+        }
+      }
+      setTimeout(type,300);
+    })();
+    */
+    var overlay=document.getElementById('intro-overlay');
+    if(overlay) overlay.style.display='none';
     function toggleTheme(){
       var h=document.documentElement;
       var b=document.querySelector('.theme-toggle');
