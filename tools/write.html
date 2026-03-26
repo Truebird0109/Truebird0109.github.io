@@ -1,0 +1,325 @@
+---
+layout: default
+title: Write
+permalink: /tools/write/
+---
+
+<link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+
+<!-- 게이트 -->
+<div id="gate">
+  <div class="gate-box">
+    <div class="gate-title">> write_access</div>
+    <div id="gate-setup" style="display:none;">
+      <p class="gate-sub">처음 접속입니다. 비밀번호를 설정하세요.</p>
+      <input type="password" id="setup-pw1" class="gate-input" placeholder="비밀번호" />
+      <input type="password" id="setup-pw2" class="gate-input" style="margin-top:8px;" placeholder="비밀번호 확인" />
+      <button class="gate-btn" onclick="setupPassword()">설정</button>
+      <p class="gate-err" id="setup-err"></p>
+    </div>
+    <div id="gate-login" style="display:none;">
+      <p class="gate-sub">비밀번호를 입력하세요.</p>
+      <input type="password" id="login-pw" class="gate-input" placeholder="password" />
+      <button class="gate-btn" onclick="loginCheck()">ENTER</button>
+      <p class="gate-err" id="login-err"></p>
+    </div>
+  </div>
+</div>
+
+<!-- 에디터 -->
+<div id="editor-wrap" style="display:none;">
+  <div class="editor-topbar">
+    <span class="editor-title-label">> new_post</span>
+    <div class="editor-actions">
+      <button class="action-btn" id="secret-btn" onclick="toggleSecret(this)">🔒 일반 글</button>
+      <button class="action-btn" onclick="saveDraft()">💾 임시저장</button>
+      <button class="action-btn accent" onclick="downloadPost()">⬇ 다운로드 .md</button>
+    </div>
+  </div>
+
+  <div class="meta-row">
+    <div class="meta-group" style="flex:3;">
+      <label>제목</label>
+      <input type="text" id="meta-title" class="meta-input" placeholder="포스트 제목" />
+    </div>
+    <div class="meta-group" style="flex:1;">
+      <label>날짜</label>
+      <input type="date" id="meta-date" class="meta-input" />
+    </div>
+    <div class="meta-group" style="flex:1.5;">
+      <label>카테고리</label>
+      <select id="meta-cat" class="meta-input">
+        <option value="web-hacking">Web Hacking</option>
+        <option value="forensics">Forensics</option>
+        <option value="penetration-testing">Penetration Testing</option>
+        <option value="wargame">Wargame</option>
+        <option value="etc">ETC</option>
+      </select>
+    </div>
+    <div class="meta-group" style="flex:2;">
+      <label>태그 (쉼표 구분)</label>
+      <input type="text" id="meta-tags" class="meta-input" placeholder="sqli, web" />
+    </div>
+  </div>
+
+  <div id="secret-row" style="display:none;" class="meta-row">
+    <div class="meta-group" style="flex:1;">
+      <label>암호화 비밀번호</label>
+      <input type="password" id="enc-pw" class="meta-input" placeholder="이 포스트에 걸 비밀번호" />
+    </div>
+    <div style="display:flex;align-items:flex-end;padding-bottom:10px;">
+      <span style="color:var(--text2);font-size:0.82em;">저장 시 자동 AES 암호화됩니다.</span>
+    </div>
+  </div>
+
+  <div id="editor-container"></div>
+
+  <div id="draft-toast" style="position:fixed;bottom:24px;right:24px;background:var(--card);border:1px solid var(--accent);color:var(--accent);padding:8px 18px;font-family:'Press Start 2P',cursive;font-size:0.52em;opacity:0;transition:opacity 0.4s;z-index:9999;box-shadow:0 0 16px rgba(0,255,255,0.2);pointer-events:none;"></div>
+
+  <div class="img-tip">
+    💡 이미지 삽입: 툴바 이미지 버튼 → URL 탭 → <code>/assets/images/파일명.png</code> 입력.
+    이미지 파일은 미리 <code>assets/images/</code> 폴더에 넣어두세요.
+  </div>
+</div>
+
+<style>
+  #gate{display:flex;justify-content:center;padding:60px 0;}
+  .gate-box{background:var(--card);border:2px solid var(--border);padding:40px;width:100%;max-width:380px;text-align:center;}
+  .gate-title{font-family:'Press Start 2P',cursive;font-size:0.7em;color:var(--accent);margin-bottom:20px;}
+  .gate-sub{color:var(--text2);font-size:0.85em;margin-bottom:16px;}
+  .gate-input{width:100%;background:var(--bg);border:2px solid var(--border);color:var(--text);padding:10px 14px;font-family:'Pretendard',sans-serif;font-size:0.95em;outline:none;transition:border-color 0.2s;}
+  .gate-input:focus{border-color:var(--accent);}
+  .gate-btn{margin-top:14px;width:100%;background:var(--accent);color:#0a0a0f;border:none;padding:12px;cursor:pointer;font-family:'Press Start 2P',cursive;font-size:0.6em;transition:opacity 0.2s;}
+  .gate-btn:hover{opacity:0.85;}
+  .gate-err{color:#ff4444;font-size:0.82em;margin-top:10px;min-height:1.2em;}
+
+  #editor-wrap{display:flex;flex-direction:column;gap:14px;}
+  .editor-topbar{display:flex;justify-content:space-between;align-items:center;padding-bottom:12px;border-bottom:2px dashed var(--border);}
+  .editor-title-label{font-family:'Press Start 2P',cursive;font-size:0.7em;color:var(--accent);}
+  .editor-actions{display:flex;gap:8px;}
+  .action-btn{background:var(--card);border:1px solid var(--border);color:var(--text2);padding:8px 16px;cursor:pointer;font-family:'Pretendard',sans-serif;font-size:0.85em;transition:all 0.15s;}
+  .action-btn:hover{border-color:var(--accent);color:var(--accent);}
+  .action-btn.accent{background:var(--accent);color:#0a0a0f;border-color:var(--accent);font-weight:700;}
+  .action-btn.accent:hover{opacity:0.85;}
+  .action-btn.on{background:var(--accent);color:#0a0a0f;border-color:var(--accent);}
+
+  .meta-row{display:flex;flex-wrap:wrap;gap:10px;}
+  .meta-group{display:flex;flex-direction:column;gap:5px;min-width:130px;}
+  .meta-group label{color:var(--accent);font-size:0.72em;font-family:'Press Start 2P',cursive;}
+  .meta-input{background:var(--bg2);border:2px solid var(--border);color:var(--text);padding:8px 12px;font-family:'Pretendard',sans-serif;font-size:0.9em;outline:none;transition:border-color 0.2s;width:100%;}
+  .meta-input:focus{border-color:var(--accent);}
+  select.meta-input option{background:var(--bg2);}
+
+  .img-tip{background:var(--bg2);border:1px solid var(--border);padding:12px 16px;font-size:0.83em;color:var(--text2);}
+  .img-tip code{color:var(--accent);}
+
+  /* Toast UI 오버라이드 */
+  #editor-container .toastui-editor-defaultUI{border:2px solid var(--border);}
+  #editor-container .toastui-editor-toolbar{background:var(--bg2);border-bottom:1px solid var(--border);}
+  #editor-container .toastui-editor-ww-container,
+  #editor-container .toastui-editor-md-container{background:var(--bg);}
+  #editor-container .ProseMirror,
+  #editor-container .toastui-editor-contents,
+  #editor-container .CodeMirror{background:var(--bg)!important;color:var(--text)!important;font-family:'Pretendard',sans-serif!important;font-size:0.95em!important;}
+  #editor-container .toastui-editor-mode-switch{background:var(--bg2);border-top:1px solid var(--border);}
+  #editor-container .tab-item{color:var(--text2);}
+  #editor-container .tab-item.active{color:var(--accent);}
+  #editor-container .toastui-editor-popup{background:var(--card);border:1px solid var(--border);}
+  #editor-container .toastui-editor-popup-body input{background:var(--bg);border:1px solid var(--border);color:var(--text);}
+
+  /* 테이블 컬럼 리사이저 */
+  .col-resizer{position:absolute;right:-2px;top:0;bottom:0;width:5px;cursor:col-resize;z-index:10;background:transparent;transition:background 0.15s;}
+  .col-resizer:hover{background:var(--accent);}
+  .toastui-editor-ww-container table th,
+  .toastui-editor-ww-container table td{position:relative;}
+</style>
+
+<script>
+  var HASH_KEY='write_pw_hash';
+  var DRAFT_KEY='write_draft_v1';
+  var isSecret=false;
+  var editor=null;
+  var autoSaveTimer=null;
+
+  (function(){
+    var stored=localStorage.getItem(HASH_KEY);
+    if(!stored){
+      document.getElementById('gate-setup').style.display='';
+    } else {
+      document.getElementById('gate-login').style.display='';
+      document.getElementById('login-pw').addEventListener('keydown',function(e){ if(e.key==='Enter') loginCheck(); });
+    }
+  })();
+
+  function setupPassword(){
+    var pw1=document.getElementById('setup-pw1').value;
+    var pw2=document.getElementById('setup-pw2').value;
+    var err=document.getElementById('setup-err');
+    if(!pw1){err.textContent='비밀번호를 입력하세요.';return;}
+    if(pw1!==pw2){err.textContent='비밀번호가 일치하지 않습니다.';return;}
+    localStorage.setItem(HASH_KEY,CryptoJS.SHA256(pw1).toString());
+    openEditor();
+  }
+
+  function loginCheck(){
+    var pw=document.getElementById('login-pw').value;
+    if(CryptoJS.SHA256(pw).toString()!==localStorage.getItem(HASH_KEY)){
+      var err=document.getElementById('login-err');
+      var inp=document.getElementById('login-pw');
+      err.textContent='비밀번호가 틀렸습니다.';
+      inp.value='';inp.style.borderColor='#ff4444';
+      setTimeout(function(){inp.style.borderColor='';err.textContent='';},1500);
+      return;
+    }
+    openEditor();
+  }
+
+  function openEditor(){
+    document.getElementById('gate').style.display='none';
+    document.getElementById('editor-wrap').style.display='flex';
+
+    var d=new Date();
+    document.getElementById('meta-date').value=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+
+    var isDark=document.documentElement.getAttribute('data-theme')!=='light';
+
+    editor=new toastui.Editor({
+      el: document.getElementById('editor-container'),
+      height: '560px',
+      initialEditType: 'wysiwyg',
+      previewStyle: 'vertical',
+      theme: isDark?'dark':'',
+      placeholder: '여기에 내용을 작성하세요...',
+      toolbarItems:[
+        ['heading','bold','italic','strike'],
+        ['hr','quote'],
+        ['ul','ol','task'],
+        ['table','image','link'],
+        ['code','codeblock'],
+        ['scrollSync']
+      ]
+    });
+
+    // 임시저장 복원
+    var saved=localStorage.getItem(DRAFT_KEY);
+    if(saved){
+      try{
+        var draft=JSON.parse(saved);
+        if(draft.title) document.getElementById('meta-title').value=draft.title;
+        if(draft.date)  document.getElementById('meta-date').value=draft.date;
+        if(draft.cat)   document.getElementById('meta-cat').value=draft.cat;
+        if(draft.tags)  document.getElementById('meta-tags').value=draft.tags;
+        if(draft.content) editor.setMarkdown(draft.content);
+        showToast('임시저장 복원됨 ('+draft.savedAt+')');
+      }catch(e){}
+    }
+    // 30초마다 자동저장
+    autoSaveTimer=setInterval(saveDraft,30000);
+    var saveDebounce=null;
+    editor.on('change',function(){ clearTimeout(saveDebounce); saveDebounce=setTimeout(saveDraft,3000); });
+
+    // 테이블 컬럼 리사이즈
+    var wwArea=document.querySelector('#editor-container .toastui-editor-ww-container');
+    if(wwArea) initTableResize(wwArea);
+  }
+
+  function initTableResize(container){
+    var timer=null;
+    var observer=new MutationObserver(function(mutations){
+      var skip=mutations.every(function(m){
+        return Array.from(m.addedNodes).every(function(n){
+          return n.classList&&n.classList.contains('col-resizer');
+        });
+      });
+      if(skip) return;
+      clearTimeout(timer);
+      timer=setTimeout(function(){
+        observer.disconnect();
+        container.querySelectorAll('table th, table td').forEach(function(cell){
+          if(cell.querySelector('.col-resizer')) return;
+          var r=document.createElement('div');
+          r.className='col-resizer';
+          r.addEventListener('mousedown',onResizerDown);
+          cell.appendChild(r);
+        });
+        observer.observe(container,{childList:true,subtree:true});
+      },150);
+    });
+    observer.observe(container,{childList:true,subtree:true});
+  }
+
+  function onResizerDown(e){
+    var cell=e.target.parentElement;
+    var startX=e.clientX, startW=cell.offsetWidth;
+    function onMove(e){ cell.style.width=Math.max(40,startW+(e.clientX-startX))+'px'; }
+    function onUp(){ document.removeEventListener('mousemove',onMove); document.removeEventListener('mouseup',onUp); }
+    document.addEventListener('mousemove',onMove);
+    document.addEventListener('mouseup',onUp);
+    e.preventDefault(); e.stopPropagation();
+  }
+
+  function toggleSecret(btn){
+    isSecret=!isSecret;
+    btn.textContent=isSecret?'🔒 비밀 글':'🔒 일반 글';
+    btn.classList.toggle('on',isSecret);
+    document.getElementById('secret-row').style.display=isSecret?'':'none';
+  }
+
+  function downloadPost(){
+    if(!editor){alert('에디터가 준비되지 않았습니다.');return;}
+    var title=document.getElementById('meta-title').value.trim()||'제목 없음';
+    var date =document.getElementById('meta-date').value;
+    var cat  =document.getElementById('meta-cat').value;
+    var tags =document.getElementById('meta-tags').value.split(',').map(function(t){return t.trim();}).filter(Boolean);
+    var md   =editor.getMarkdown();
+
+    var content='';
+    if(isSecret){
+      var encPw=document.getElementById('enc-pw').value;
+      if(!encPw){alert('암호화 비밀번호를 입력하세요.');return;}
+      if(!md){alert('내용을 입력하세요.');return;}
+      var encrypted=CryptoJS.AES.encrypt('TRUEBIRD:'+md,encPw).toString();
+      content='---\nlayout: post\ntitle: '+title+'\ndate: '+date+'\ncategories: ['+cat+']\ntags: ['+tags.join(', ')+']\nsecret: true\nencrypted: "'+encrypted+'"\n---\n';
+    } else {
+      content='---\nlayout: post\ntitle: '+title+'\ndate: '+date+'\ncategories: ['+cat+']\ntags: ['+tags.join(', ')+']\n---\n\n'+md;
+    }
+
+    var slug=title.toLowerCase().replace(/[^a-z0-9가-힣]+/g,'-').replace(/^-|-$/g,'');
+    var filename=date+'-'+(slug||'post')+'.md';
+    var blob=new Blob([content],{type:'text/markdown'});
+    var a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download=filename;
+    a.click();
+    localStorage.removeItem(DRAFT_KEY);
+    if(autoSaveTimer) clearInterval(autoSaveTimer);
+    showToast('다운로드 완료');
+  }
+
+  function saveDraft(){
+    if(!editor) return;
+    var now=new Date();
+    var ts=now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate())+' '+pad(now.getHours())+':'+pad(now.getMinutes());
+    localStorage.setItem(DRAFT_KEY,JSON.stringify({
+      title:document.getElementById('meta-title').value,
+      date:document.getElementById('meta-date').value,
+      cat:document.getElementById('meta-cat').value,
+      tags:document.getElementById('meta-tags').value,
+      content:editor.getMarkdown(),
+      savedAt:ts
+    }));
+    showToast('저장됨 '+ts);
+  }
+
+  function showToast(msg){
+    var t=document.getElementById('draft-toast');
+    if(!t) return;
+    t.textContent=msg;t.style.opacity='1';
+    clearTimeout(showToast._t);
+    showToast._t=setTimeout(function(){t.style.opacity='0';},2500);
+  }
+
+  function pad(n){return n<10?'0'+n:n;}
+</script>

@@ -1,0 +1,74 @@
+---
+layout: default
+title: Post Encryptor
+permalink: /tools/encrypt/
+---
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+
+<h1>&gt; post_encryptor</h1>
+<p style="color:var(--text2);font-size:0.9em;margin-bottom:30px;">마크다운 내용을 AES 암호화해서 비밀 포스트용 front matter를 생성합니다.</p>
+
+<div class="enc-wrap">
+  <div class="enc-group">
+    <label class="enc-label">포스트 내용 (마크다운)</label>
+    <textarea id="content" class="enc-input" rows="12" placeholder="## 제목&#10;&#10;내용을 작성하세요..."></textarea>
+  </div>
+
+  <div class="enc-group">
+    <label class="enc-label">비밀번호</label>
+    <input type="password" id="password" class="enc-input" placeholder="암호화에 사용할 비밀번호" />
+  </div>
+
+  <button class="enc-btn" onclick="encrypt()">암호화 &amp; front matter 생성</button>
+</div>
+
+<div id="result-area" style="display:none;margin-top:30px;">
+  <h2>&gt; result</h2>
+
+  <label class="enc-label" style="margin-top:16px;">포스트 front matter</label>
+  <pre id="frontmatter" style="user-select:all;cursor:text;"></pre>
+  <button class="enc-btn" style="margin-top:10px;width:auto;padding:10px 24px;" onclick="copyFrontmatter()">복사</button>
+  <p style="color:var(--text2);font-size:0.82em;margin-top:10px;">* 새 포스트 파일에 붙여넣고 본문은 비워두세요.</p>
+</div>
+
+<style>
+  .enc-wrap{display:flex;flex-direction:column;gap:16px;}
+  .enc-group{display:flex;flex-direction:column;gap:8px;}
+  .enc-label{color:var(--accent);font-size:0.82em;font-family:'Press Start 2P',cursive;}
+  .enc-input{background:var(--bg2);border:2px solid var(--border);color:var(--text);padding:12px;font-family:'Pretendard',sans-serif;font-size:0.92em;outline:none;resize:vertical;transition:border-color 0.2s;width:100%;}
+  .enc-input:focus{border-color:var(--accent);}
+  .enc-btn{background:var(--accent);color:#0a0a0f;border:none;padding:12px 0;cursor:pointer;font-family:'Press Start 2P',cursive;font-size:0.6em;width:100%;transition:opacity 0.2s;}
+  .enc-btn:hover{opacity:0.85;}
+</style>
+
+<script>
+  function encrypt() {
+    var content = document.getElementById('content').value.trim();
+    var password = document.getElementById('password').value;
+    if(!content){ alert('내용을 입력하세요.'); return; }
+    if(!password){ alert('비밀번호를 입력하세요.'); return; }
+
+    var encrypted = CryptoJS.AES.encrypt('TRUEBIRD:' + content, password).toString();
+    var fm = '---\nlayout: post\ntitle: 제목 입력\ndate: ' + today() + '\ncategories: []\ntags: []\nsecret: true\nencrypted: "' + encrypted + '"\n---';
+
+    document.getElementById('frontmatter').textContent = fm;
+    document.getElementById('result-area').style.display = '';
+    document.getElementById('result-area').scrollIntoView({behavior:'smooth'});
+  }
+
+  function copyFrontmatter() {
+    var text = document.getElementById('frontmatter').textContent;
+    navigator.clipboard.writeText(text).then(function(){
+      var btn = event.target;
+      btn.textContent = '복사됨!';
+      setTimeout(function(){ btn.textContent = '복사'; }, 1500);
+    });
+  }
+
+  function today() {
+    var d = new Date();
+    return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate());
+  }
+  function pad(n){ return n < 10 ? '0'+n : n; }
+</script>
