@@ -45,6 +45,14 @@ title: Home
         </div>
         <div class="cat-arrow">&#9654;</div>
       </div>
+      <div class="cat-card" data-cat="web3-security" data-label="Web3 Security" data-icon="[W3]">
+        <div class="cat-icon">[W3]</div>
+        <div class="cat-name">-&gt; Web3 Security</div>
+        <div class="cat-count">
+          {% assign c=0 %}{% for p in site.posts %}{% if p.categories contains 'web3-security' %}{% assign c=c|plus:1 %}{% endif %}{% endfor %}{{ c }} posts
+        </div>
+        <div class="cat-arrow">&#9654;</div>
+      </div>
       <div class="cat-card" data-cat="etc" data-label="ETC" data-icon="[ETC]">
         <div class="cat-icon">[ETC]</div>
         <div class="cat-name">-&gt; ETC</div>
@@ -176,6 +184,7 @@ title: Home
     {cat:'forensics',    label:'Forensics',            icon:'[FOR]'},
     {cat:'penetration-testing', label:'Penetration Testing', icon:'[PEN]'},
     {cat:'wargame',      label:'Wargame',              icon:'[WAR]'},
+    {cat:'web3-security', label:'Web3 Security',         icon:'[W3]'},
     {cat:'etc',          label:'ETC',                  icon:'[ETC]'}
   ];
 
