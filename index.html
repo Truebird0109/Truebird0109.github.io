@@ -74,9 +74,14 @@ title: Home
         <div id="sel-count" class="cat-count"></div>
       </div>
       <div id="post-list">
+        <div id="post-list-toolbar">
+          <span id="sort-label">정렬:</span>
+          <button class="sort-btn active" id="sort-latest" onclick="setSortOrder('latest')">최신순</button>
+          <button class="sort-btn" id="sort-title" onclick="setSortOrder('title')">제목순</button>
+        </div>
         <div id="post-list-inner">
           {% for post in site.posts %}
-          <a class="post-row" href="{{ post.url }}" data-cat="{{ post.categories | join: ' ' | downcase }}">
+          <a class="post-row" href="{{ post.url }}" data-cat="{{ post.categories | join: ' ' | downcase }}" data-date="{{ post.date | date: '%Y-%m-%d' }}" data-title="{{ post.title }}">
             <span class="post-row-prompt">$</span>
             <span class="post-row-title">{{ post.title }}</span>
             <span class="post-row-date">{{ post.date | date: "%Y-%m-%d" }}</span>
@@ -127,6 +132,26 @@ title: Home
   #selected-card .cat-icon{color:var(--accent);}
   #selected-card .cat-name{color:var(--accent);}
   @keyframes expandIn{from{transform:scale(0.96);opacity:0.6;}to{transform:scale(1);opacity:1;}}
+
+  /* 정렬 툴바 */
+  #post-list-toolbar{
+    display:flex;align-items:center;gap:6px;
+    padding:7px 14px;
+    border-bottom:1px solid var(--border);
+    background:var(--bg2);
+  }
+  #sort-label{
+    font-family:'Pretendard',sans-serif;font-size:0.75em;
+    color:var(--text2);flex-shrink:0;
+  }
+  .sort-btn{
+    background:none;border:1px solid var(--border);
+    padding:3px 9px;cursor:pointer;
+    font-family:'Pretendard',sans-serif;font-size:0.72em;
+    color:var(--text2);transition:all 0.15s;
+  }
+  .sort-btn:hover{border-color:var(--accent);color:var(--accent);}
+  .sort-btn.active{border-color:var(--accent);color:var(--accent);background:var(--card);}
 
   /* 게시판 */
   #post-list{
@@ -269,6 +294,37 @@ title: Home
     });
     document.getElementById('sel-count').textContent = visible + ' posts';
     document.getElementById('no-posts').style.display = visible === 0 ? '' : 'none';
+    sortPosts();
+  }
+
+  var currentSort = 'latest';
+
+  function setSortOrder(order) {
+    currentSort = order;
+    document.querySelectorAll('.sort-btn').forEach(function(b){ b.classList.remove('active'); });
+    document.getElementById('sort-' + order).classList.add('active');
+    sortPosts();
+  }
+
+  function sortPosts() {
+    var inner = document.getElementById('post-list-inner');
+    var rows = Array.from(inner.querySelectorAll('.post-row'));
+    var noPostsEl = document.getElementById('no-posts');
+
+    rows.sort(function(a, b) {
+      if (currentSort === 'latest') {
+        return b.dataset.date.localeCompare(a.dataset.date) || a.dataset.title.localeCompare(b.dataset.title, 'ko');
+      } else {
+        // 제목순: 숫자 포함 자연어 정렬
+        var ta = a.dataset.title, tb = b.dataset.title;
+        var na = ta.match(/#(\d+)/), nb = tb.match(/#(\d+)/);
+        if (na && nb) return parseInt(na[1]) - parseInt(nb[1]);
+        return ta.localeCompare(tb, 'ko');
+      }
+    });
+
+    rows.forEach(function(r){ inner.appendChild(r); });
+    inner.appendChild(noPostsEl);
   }
 
   function goBack() {
