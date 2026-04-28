@@ -1103,7 +1103,56 @@ permalink: /health/
     { time: '저녁 19:00', kcal: 420, items: ['연어 스테이크 150g', '구운 채소', '퀴노아 80g'] }
   ];
 
+  // ============ 이번주 커스텀 스케줄 (2026-04-27 ~ 2026-05-03) ============
+  // 다음주(5/4~)부터는 표준 로테이션
+  const WEEK_OVERRIDE = {
+    '2026-04-27': { type: 'workout', what: '하체',         subtype: 'legs' },
+    '2026-04-28': { type: 'workout', what: '가슴 + 삼두',  subtype: 'chest' },
+    '2026-04-29': { type: 'workout', what: '등 + 이두',    subtype: 'back' },
+    '2026-04-30': { type: 'cardio',  what: '유산소 LISS 30~40분' },
+    '2026-05-01': { type: 'workout', what: '어깨 + 팔',    subtype: 'shoulder' },
+    '2026-05-02': { type: 'cardio',  what: '유산소 인터벌 40~50분' },
+    '2026-05-03': { type: 'rest',    what: '휴식' }
+  };
+
+  function getPlanForDate(dateKey, dow) {
+    if (WEEK_OVERRIDE[dateKey]) return WEEK_OVERRIDE[dateKey];
+    const standard = {
+      1: { type: 'workout', what: '가슴 + 삼두', subtype: 'chest' },
+      2: { type: 'workout', what: '등 + 이두', subtype: 'back' },
+      3: { type: 'cardio',  what: '유산소 LISS 30~40분' },
+      4: { type: 'workout', what: '하체', subtype: 'legs' },
+      5: { type: 'workout', what: '어깨 + 팔', subtype: 'shoulder' },
+      6: { type: 'cardio',  what: '유산소 인터벌 40~50분' },
+      0: { type: 'rest',    what: '휴식' }
+    };
+    return standard[dow];
+  }
+
+  // 이번주 월/화 운동 완료 자동 체크 (한 번만)
+  function applyWeekDefaults() {
+    if (DATA.config.weekDefaultsApplied) return;
+    const presets = {
+      '2026-04-27': { workout: { done: true, type: 'legs' } },
+      '2026-04-28': { workout: { done: true, type: 'chest' } }
+    };
+    Object.keys(presets).forEach(d => {
+      if (!DATA.logs[d]) {
+        DATA.logs[d] = {
+          date: d, weight: null, water: null,
+          meals: {}, kcal: {},
+          workout: presets[d].workout,
+          cardio: { done: false, min: 0 },
+          notes: '(자동 기록 — 칼로리/체중은 직접 입력)'
+        };
+      }
+    });
+    DATA.config.weekDefaultsApplied = true;
+    saveData();
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
+    applyWeekDefaults();
     initConfig();
     renderHero();
     renderTopTag();
@@ -1145,17 +1194,6 @@ permalink: /health/
     const todayKey = today.toISOString().slice(0,10);
     const phase = getCurrentPhase();
 
-    // 요일별 운동 계획 (월=1, 일=0)
-    const planByDow = {
-      1: { type: 'workout', label: '가슴+삼두' },
-      2: { type: 'workout', label: '등+이두' },
-      3: { type: 'cardio', label: '유산소' },
-      4: { type: 'workout', label: '하체' },
-      5: { type: 'workout', label: '어깨+팔' },
-      6: { type: 'cardio', label: '유산소' },
-      0: { type: 'rest', label: '휴식' }
-    };
-
     let html = '';
     // 앞 빈칸
     for (let i = 0; i < firstDay; i++) {
@@ -1167,7 +1205,7 @@ permalink: /health/
       const dateKey = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
       const dow = date.getDay();
       const log = DATA.logs[dateKey] || {};
-      const plan = planByDow[dow];
+      const plan = getPlanForDate(dateKey, dow);
       const isFuture = date > today && dateKey !== todayKey;
       const isToday = dateKey === todayKey;
 
@@ -1376,19 +1414,39 @@ permalink: /health/
   }
 
   function renderWeek() {
-    const wkday = new Date().getDay();
-    const days = [
-      { l:'월', c:'가슴<br>삼두' },
-      { l:'화', c:'등<br>이두' },
-      { l:'수', c:'유산소', cardio:true },
-      { l:'목', c:'하체' },
-      { l:'금', c:'어깨<br>팔' },
-      { l:'토', c:'유산소', cardio:true },
-      { l:'일', c:'휴식', rest:true }
-    ];
-    const todayIdx = wkday === 0 ? 6 : wkday - 1;
-    document.getElementById('week-grid').innerHTML = days.map((d, i) => `
-      <div class="h-day ${d.rest?'rest':''} ${d.cardio?'cardio':''} ${i===todayIdx?'today':''}">
+    const now = new Date();
+    const wkday = now.getDay();
+    // 이번주 월요일 찾기
+    const monday = new Date(now);
+    const offset = wkday === 0 ? -6 : 1 - wkday;
+    monday.setDate(now.getDate() + offset);
+
+    const labels = ['월','화','수','목','금','토','일'];
+    const dows = [1,2,3,4,5,6,0];
+    const todayKey = now.toISOString().slice(0,10);
+
+    const days = labels.map((l, i) => {
+      const d = new Date(monday);
+      d.setDate(monday.getDate() + i);
+      const dKey = d.toISOString().slice(0,10);
+      const plan = getPlanForDate(dKey, dows[i]);
+      let content = plan.what
+        .replace('가슴 + 삼두', '가슴<br>삼두')
+        .replace('등 + 이두', '등<br>이두')
+        .replace('어깨 + 팔', '어깨<br>팔')
+        .replace(/유산소.*/, '유산소')
+        .replace('하체', '하체')
+        .replace('휴식', '휴식');
+      return {
+        l, c: content,
+        rest: plan.type === 'rest',
+        cardio: plan.type === 'cardio',
+        today: dKey === todayKey
+      };
+    });
+
+    document.getElementById('week-grid').innerHTML = days.map(d => `
+      <div class="h-day ${d.rest?'rest':''} ${d.cardio?'cardio':''} ${d.today?'today':''}">
         <div class="h-day-label">${d.l}</div>
         <div class="h-day-content">${d.c}</div>
       </div>`).join('');
@@ -1483,19 +1541,17 @@ permalink: /health/
 
   function renderDashboard() {
     const phase = getCurrentPhase();
-    const wk = new Date().getDay();
+    const now = new Date();
+    const wk = now.getDay();
     const wkdays = ['일','월','화','수','목','금','토'];
     const wkday = wkdays[wk];
-    const plans = {
-      '월':{ what:'가슴 + 삼두', cardio:false, type:'workout' },
-      '화':{ what:'등 + 이두', cardio:false, type:'workout' },
-      '수':{ what:'유산소 LISS 30~40분', cardio:true, type:'cardio' },
-      '목':{ what:'하체', cardio:false, type:'workout' },
-      '금':{ what:'어깨 + 팔', cardio:false, type:'workout' },
-      '토':{ what:'유산소 인터벌 40~50분', cardio:true, type:'cardio' },
-      '일':{ what:'휴식 (가벼운 산책)', cardio:false, type:'rest' }
+    const todayKey2 = now.toISOString().slice(0,10);
+    const planRaw = getPlanForDate(todayKey2, wk);
+    const todayPlan = {
+      what: planRaw.what,
+      type: planRaw.type,
+      cardio: planRaw.type === 'cardio'
     };
-    const todayPlan = plans[wkday];
 
     document.getElementById('today-info').innerHTML =
       `${new Date().toISOString().slice(0,10)} · ${wkday}요일 · ` +
