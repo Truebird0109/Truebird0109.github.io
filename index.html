@@ -2,104 +2,192 @@
 layout: default
 title: Home
 ---
-<div style="margin-bottom:24px;padding:15px;border:2px solid var(--accent);background:var(--bg2);">
-  <p style="font-family:'Press Start 2P',cursive;font-size:0.7em;color:var(--accent);margin-bottom:8px;">&gt; whoami</p>
-  <p style="margin:0;">해킹 &amp; 보안을 공부하며 배운 것들을 기록하는 블로그입니다. CTF, 웹 해킹, 시스템 해킹, 리버싱 등 다양한 주제를 다룹니다.</p>
+
+<!-- 메인 메뉴 -->
+<div id="main-menu">
+  <p style="font-family:'Press Start 2P',cursive;font-size:0.65em;color:var(--accent);margin-bottom:28px;">C:\&gt; select mode</p>
+  <div id="main-btn-wrap">
+    <button class="main-btn" onclick="selectMode('study')">
+      <span class="main-btn-icon">[STU]</span>
+      <span class="main-btn-label">Study</span>
+      <span class="main-btn-sub">Hacking &amp; Security</span>
+    </button>
+    <button class="main-btn" onclick="location.href='/health/'">
+      <span class="main-btn-icon">[FIT]</span>
+      <span class="main-btn-label">Health</span>
+      <span class="main-btn-sub">Training &amp; Fitness</span>
+    </button>
+  </div>
 </div>
 
-<p style="font-family:'Press Start 2P',cursive;font-size:0.65em;color:var(--accent);margin-bottom:16px;" id="cmd-prompt">C:\blog&gt; ls categories/</p>
-
-<div id="cat-wrapper">
-  <!-- 카테고리 그리드 -->
-  <div id="cat-grid-area">
-    <div class="cat-grid" id="cat-grid">
-      <div class="cat-card" data-cat="web-hacking" data-label="웹 해킹" data-icon="[WEB]">
-        <div class="cat-icon">[WEB]</div>
-        <div class="cat-name">-&gt; Web Hacking</div>
-        <div class="cat-count" id="cnt-web-hacking">
-          {% assign c=0 %}{% for p in site.posts %}{% if p.categories contains 'web-hacking' %}{% assign c=c|plus:1 %}{% endif %}{% endfor %}{{ c }} posts
-        </div>
-        <div class="cat-arrow">&#9654;</div>
-      </div>
-      <div class="cat-card" data-cat="forensics" data-label="포렌식" data-icon="[FOR]">
-        <div class="cat-icon">[FOR]</div>
-        <div class="cat-name">-&gt; Forensics</div>
-        <div class="cat-count">
-          {% assign c=0 %}{% for p in site.posts %}{% if p.categories contains 'forensics' %}{% assign c=c|plus:1 %}{% endif %}{% endfor %}{{ c }} posts
-        </div>
-        <div class="cat-arrow">&#9654;</div>
-      </div>
-      <div class="cat-card" data-cat="penetration-testing" data-label="Penetration Testing" data-icon="[PEN]">
-        <div class="cat-icon">[PEN]</div>
-        <div class="cat-name">-&gt; Penetration Testing</div>
-        <div class="cat-count">
-          {% assign c=0 %}{% for p in site.posts %}{% if p.categories contains 'penetration-testing' %}{% assign c=c|plus:1 %}{% endif %}{% endfor %}{{ c }} posts
-        </div>
-        <div class="cat-arrow">&#9654;</div>
-      </div>
-      <div class="cat-card" data-cat="wargame" data-label="Wargame" data-icon="[WAR]">
-        <div class="cat-icon">[WAR]</div>
-        <div class="cat-name">-&gt; Wargame</div>
-        <div class="cat-count">
-          {% assign c=0 %}{% for p in site.posts %}{% if p.categories contains 'wargame' %}{% assign c=c|plus:1 %}{% endif %}{% endfor %}{{ c }} posts
-        </div>
-        <div class="cat-arrow">&#9654;</div>
-      </div>
-      <div class="cat-card" data-cat="web3-security" data-label="Web3 Security" data-icon="[W3]">
-        <div class="cat-icon">[W3]</div>
-        <div class="cat-name">-&gt; Web3 Security</div>
-        <div class="cat-count">
-          {% assign c=0 %}{% for p in site.posts %}{% if p.categories contains 'web3-security' %}{% assign c=c|plus:1 %}{% endif %}{% endfor %}{{ c }} posts
-        </div>
-        <div class="cat-arrow">&#9654;</div>
-      </div>
-      <div class="cat-card" data-cat="etc" data-label="ETC" data-icon="[ETC]">
-        <div class="cat-icon">[ETC]</div>
-        <div class="cat-name">-&gt; ETC</div>
-        <div class="cat-count">
-          {% assign c=0 %}{% for p in site.posts %}{% if p.categories contains 'etc' %}{% assign c=c|plus:1 %}{% endif %}{% endfor %}{{ c }} posts
-        </div>
-        <div class="cat-arrow">&#9654;</div>
-      </div>
-    </div>
+<!-- Study 영역 -->
+<div id="study-area" style="display:none;">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+    <button class="menu-back-btn" onclick="goMenu()">&lt; menu</button>
+    <p style="font-family:'Press Start 2P',cursive;font-size:0.65em;color:var(--accent);margin:0;" id="cmd-prompt">C:\blog&gt; ls categories/</p>
   </div>
 
-  <!-- 선택 후 레이아웃 -->
-  <div id="selected-layout" style="display:none;">
-    <!-- 좌측: 선택된 카드 + 게시판 -->
-    <div id="selected-left">
-      <div id="selected-card">
-        <div id="sel-icon" class="cat-icon"></div>
-        <div id="sel-name" class="cat-name"></div>
-        <div id="sel-count" class="cat-count"></div>
-      </div>
-      <div id="post-list">
-        <div id="post-list-toolbar">
-          <span id="sort-label">정렬:</span>
-          <button class="sort-btn active" id="sort-latest" onclick="setSortOrder('latest')">최신순</button>
-          <button class="sort-btn" id="sort-title" onclick="setSortOrder('title')">제목순</button>
+  <div id="cat-wrapper">
+    <!-- 카테고리 그리드 -->
+    <div id="cat-grid-area">
+      <div class="cat-grid" id="cat-grid">
+        <div class="cat-card" data-cat="web-hacking" data-label="웹 해킹" data-icon="[WEB]">
+          <div class="cat-icon">[WEB]</div>
+          <div class="cat-name">-&gt; Web Hacking</div>
+          <div class="cat-count">
+            {% assign c=0 %}{% for p in site.posts %}{% if p.categories contains 'web-hacking' %}{% assign c=c|plus:1 %}{% endif %}{% endfor %}{{ c }} posts
+          </div>
+          <div class="cat-arrow">&#9654;</div>
         </div>
-        <div id="post-list-inner">
-          {% for post in site.posts %}
-          <a class="post-row" href="{{ post.url }}" data-cat="{{ post.categories | join: ' ' | downcase }}" data-date="{{ post.date | date: '%Y-%m-%d' }}" data-title="{{ post.title }}">
-            <span class="post-row-prompt">$</span>
-            <span class="post-row-title">{{ post.title }}</span>
-            <span class="post-row-date">{{ post.date | date: "%Y-%m-%d" }}</span>
-          </a>
-          {% endfor %}
-          <div id="no-posts" style="display:none;">
-            <span style="color:var(--text2);font-size:0.85em;">아직 포스트가 없습니다.</span>
+        <div class="cat-card" data-cat="forensics" data-label="포렌식" data-icon="[FOR]">
+          <div class="cat-icon">[FOR]</div>
+          <div class="cat-name">-&gt; Forensics</div>
+          <div class="cat-count">
+            {% assign c=0 %}{% for p in site.posts %}{% if p.categories contains 'forensics' %}{% assign c=c|plus:1 %}{% endif %}{% endfor %}{{ c }} posts
+          </div>
+          <div class="cat-arrow">&#9654;</div>
+        </div>
+        <div class="cat-card" data-cat="penetration-testing" data-label="Penetration Testing" data-icon="[PEN]">
+          <div class="cat-icon">[PEN]</div>
+          <div class="cat-name">-&gt; Penetration Testing</div>
+          <div class="cat-count">
+            {% assign c=0 %}{% for p in site.posts %}{% if p.categories contains 'penetration-testing' %}{% assign c=c|plus:1 %}{% endif %}{% endfor %}{{ c }} posts
+          </div>
+          <div class="cat-arrow">&#9654;</div>
+        </div>
+        <div class="cat-card" data-cat="wargame" data-label="Wargame" data-icon="[WAR]">
+          <div class="cat-icon">[WAR]</div>
+          <div class="cat-name">-&gt; Wargame</div>
+          <div class="cat-count">
+            {% assign c=0 %}{% for p in site.posts %}{% if p.categories contains 'wargame' %}{% assign c=c|plus:1 %}{% endif %}{% endfor %}{{ c }} posts
+          </div>
+          <div class="cat-arrow">&#9654;</div>
+        </div>
+        <div class="cat-card" data-cat="web3-security" data-label="Web3 Security" data-icon="[W3]">
+          <div class="cat-icon">[W3]</div>
+          <div class="cat-name">-&gt; Web3 Security</div>
+          <div class="cat-count">
+            {% assign c=0 %}{% for p in site.posts %}{% if p.categories contains 'web3-security' %}{% assign c=c|plus:1 %}{% endif %}{% endfor %}{{ c }} posts
+          </div>
+          <div class="cat-arrow">&#9654;</div>
+        </div>
+        <div class="cat-card" data-cat="etc" data-label="ETC" data-icon="[ETC]">
+          <div class="cat-icon">[ETC]</div>
+          <div class="cat-name">-&gt; ETC</div>
+          <div class="cat-count">
+            {% assign c=0 %}{% for p in site.posts %}{% if p.categories contains 'etc' %}{% assign c=c|plus:1 %}{% endif %}{% endfor %}{{ c }} posts
+          </div>
+          <div class="cat-arrow">&#9654;</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 선택 후 레이아웃 -->
+    <div id="selected-layout" style="display:none;">
+      <div id="selected-left">
+        <div id="selected-card">
+          <div id="sel-icon" class="cat-icon"></div>
+          <div id="sel-name" class="cat-name"></div>
+          <div id="sel-count" class="cat-count"></div>
+        </div>
+        <div id="post-list">
+          <div id="post-list-toolbar">
+            <span id="sort-label">정렬:</span>
+            <button class="sort-btn active" id="sort-latest" onclick="setSortOrder('latest')">최신순</button>
+            <button class="sort-btn" id="sort-title" onclick="setSortOrder('title')">제목순</button>
+          </div>
+          <div id="post-list-inner">
+            {% for post in site.posts %}
+            <a class="post-row" href="{{ post.url }}" data-cat="{{ post.categories | join: ' ' | downcase }}" data-date="{{ post.date | date: '%Y-%m-%d' }}" data-title="{{ post.title }}">
+              <span class="post-row-prompt">$</span>
+              <span class="post-row-title">{{ post.title }}</span>
+              <span class="post-row-date">{{ post.date | date: "%Y-%m-%d" }}</span>
+            </a>
+            {% endfor %}
+            <div id="no-posts" style="display:none;">
+              <span style="color:var(--text2);font-size:0.85em;">아직 포스트가 없습니다.</span>
+            </div>
           </div>
         </div>
       </div>
+      <div id="cat-sidebar"></div>
     </div>
-    <!-- 우측: 나머지 카테고리 사이드바 -->
-    <div id="cat-sidebar"></div>
+  </div>
+</div>
+
+<!-- Health 영역 -->
+<div id="health-area" style="display:none;">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:28px;">
+    <button class="menu-back-btn" onclick="goMenu()">&lt; menu</button>
+    <p style="font-family:'Press Start 2P',cursive;font-size:0.65em;color:var(--accent);margin:0;">C:\health&gt; ls</p>
+  </div>
+  <div style="padding:40px 0;text-align:center;color:var(--text2);font-family:'Press Start 2P',cursive;font-size:0.6em;line-height:2.5;">
+    <div style="margin-bottom:12px;color:var(--accent);">// COMING SOON</div>
+    <div>Training logs &amp; Fitness records</div>
+    <div style="margin-top:16px;font-size:0.8em;color:var(--border);">under construction...</div>
   </div>
 </div>
 
 <style>
-  /* 기본 그리드 */
+  /* 메인 메뉴 버튼 */
+  #main-menu { padding: 20px 0; }
+  #main-btn-wrap {
+    display: flex;
+    gap: 20px;
+  }
+  @media(max-width:600px){ #main-btn-wrap { flex-direction: column; } }
+
+  .main-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 30px 28px;
+    background: var(--card);
+    border: 2px solid var(--border);
+    cursor: pointer;
+    text-align: left;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+  }
+  .main-btn:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 18px rgba(0,255,65,0.15);
+    transform: translateY(-2px);
+  }
+  .main-btn-icon {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.6em;
+    color: var(--text2);
+  }
+  .main-btn:hover .main-btn-icon { color: var(--accent); }
+  .main-btn-label {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.85em;
+    color: var(--text);
+  }
+  .main-btn:hover .main-btn-label { color: var(--accent); }
+  .main-btn-sub {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 0.82em;
+    color: var(--text2);
+  }
+
+  /* 뒤로가기 버튼 */
+  .menu-back-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text2);
+    padding: 5px 12px;
+    cursor: pointer;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 0.8em;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .menu-back-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* 카테고리 그리드 */
   .cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
   @media(max-width:600px){.cat-grid{grid-template-columns:1fr 1fr;}}
 
@@ -140,10 +228,7 @@ title: Home
     border-bottom:1px solid var(--border);
     background:var(--bg2);
   }
-  #sort-label{
-    font-family:'Pretendard',sans-serif;font-size:0.75em;
-    color:var(--text2);flex-shrink:0;
-  }
+  #sort-label{font-family:'Pretendard',sans-serif;font-size:0.75em;color:var(--text2);flex-shrink:0;}
   .sort-btn{
     background:none;border:1px solid var(--border);
     padding:3px 9px;cursor:pointer;
@@ -189,10 +274,7 @@ title: Home
     color:var(--text2);text-align:left;
     transition:all 0.15s;line-height:1.8;
   }
-  .sidebar-btn:hover,.sidebar-btn.active{
-    border-color:var(--accent);color:var(--accent);
-    background:var(--bg2);
-  }
+  .sidebar-btn:hover,.sidebar-btn.active{border-color:var(--accent);color:var(--accent);background:var(--bg2);}
   #back-btn{
     background:none;border:1px solid var(--border);
     padding:8px 12px;cursor:pointer;
@@ -205,15 +287,35 @@ title: Home
 
 <script>
   var CATS = [
-    {cat:'web-hacking',  label:'Web Hacking',          icon:'[WEB]'},
-    {cat:'forensics',    label:'Forensics',            icon:'[FOR]'},
-    {cat:'penetration-testing', label:'Penetration Testing', icon:'[PEN]'},
-    {cat:'wargame',      label:'Wargame',              icon:'[WAR]'},
-    {cat:'web3-security', label:'Web3 Security',         icon:'[W3]'},
-    {cat:'etc',          label:'ETC',                  icon:'[ETC]'}
+    {cat:'web-hacking',        label:'Web Hacking',        icon:'[WEB]'},
+    {cat:'forensics',          label:'Forensics',          icon:'[FOR]'},
+    {cat:'penetration-testing',label:'Penetration Testing',icon:'[PEN]'},
+    {cat:'wargame',            label:'Wargame',            icon:'[WAR]'},
+    {cat:'web3-security',      label:'Web3 Security',      icon:'[W3]'},
+    {cat:'etc',                label:'ETC',                icon:'[ETC]'}
   ];
 
   var currentCat = null;
+
+  function selectMode(mode) {
+    document.getElementById('main-menu').style.display = 'none';
+    if (mode === 'study') {
+      document.getElementById('study-area').style.display = '';
+    } else {
+      document.getElementById('health-area').style.display = '';
+    }
+  }
+
+  function goMenu() {
+    document.getElementById('study-area').style.display = 'none';
+    document.getElementById('health-area').style.display = 'none';
+    document.getElementById('main-menu').style.display = '';
+    // 카테고리 선택 상태도 초기화
+    currentCat = null;
+    document.getElementById('selected-layout').style.display = 'none';
+    document.getElementById('cat-grid-area').style.display = '';
+    document.getElementById('cmd-prompt').textContent = 'C:\\blog> ls categories/';
+  }
 
   document.querySelectorAll('.cat-card').forEach(function(card){
     card.addEventListener('click', function(){
@@ -228,7 +330,6 @@ title: Home
     var cards = document.querySelectorAll('.cat-card');
     var selData = null;
 
-    // 선택 안된 카드 우측으로 날리기
     cards.forEach(function(c){
       if(c.dataset.cat !== cat){
         c.classList.add('fly-out');
@@ -241,17 +342,14 @@ title: Home
       }
     });
 
-    // 애니메이션 후 레이아웃 전환
     setTimeout(function(){
       document.getElementById('cat-grid-area').style.display = 'none';
       cards.forEach(function(c){ c.classList.remove('fly-out'); });
 
-      // 선택된 카드 정보 채우기
       document.getElementById('sel-icon').textContent = selData.icon;
       document.getElementById('sel-name').textContent = selData.name;
       document.getElementById('sel-count').textContent = selData.count;
 
-      // 사이드바 채우기
       var sidebar = document.getElementById('cat-sidebar');
       sidebar.innerHTML = '<button id="back-btn" onclick="goBack()">&lt; 목록으로</button>';
       CATS.forEach(function(item){
@@ -263,7 +361,6 @@ title: Home
         sidebar.appendChild(btn);
       });
 
-      // 포스트 필터
       renderPosts(cat);
 
       document.getElementById('selected-layout').style.display = 'flex';
@@ -315,7 +412,6 @@ title: Home
       if (currentSort === 'latest') {
         return b.dataset.date.localeCompare(a.dataset.date) || a.dataset.title.localeCompare(b.dataset.title, 'ko');
       } else {
-        // 제목순: 숫자 포함 자연어 정렬
         var ta = a.dataset.title, tb = b.dataset.title;
         var na = ta.match(/#(\d+)/), nb = tb.match(/#(\d+)/);
         if (na && nb) return parseInt(na[1]) - parseInt(nb[1]);
@@ -335,13 +431,11 @@ title: Home
     area.style.display = '';
     document.getElementById('cmd-prompt').textContent = 'C:\\blog> ls categories/';
 
-    // 카드들 우측에서 원위치로 복귀
     var cards = document.querySelectorAll('.cat-card');
     cards.forEach(function(c){
       c.classList.remove('fly-out','fly-in-active');
       c.classList.add('fly-in');
     });
-    // 한 프레임 뒤에 active 클래스로 트랜지션 시작
     requestAnimationFrame(function(){
       requestAnimationFrame(function(){
         cards.forEach(function(c){
