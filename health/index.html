@@ -5,244 +5,398 @@ permalink: /health/
 ---
 
 <style>
-  /* ============= MOBILE FIRST ============= */
-  body { padding-bottom: 78px; } /* 하단 탭바 공간 */
-  main { padding: 16px 14px !important; max-width: 600px !important; }
-  header { padding: 14px !important; }
+  /* ============= 모던 클린 디자인 ============= */
+
+  /* 기존 블로그 스타일 오버라이드 */
+  body {
+    padding-bottom: 80px;
+    background: #f5f6f8;
+  }
+  [data-theme="dark"] body { background: #0d0e12; }
+
+  main {
+    padding: 14px 14px !important;
+    max-width: 600px !important;
+  }
+  header { padding: 12px 16px !important; border-bottom: none !important; }
   footer { display: none; }
 
-  .h-app { padding: 0; }
+  /* Health 컨테이너 변수 — 부모 테마 무시하고 자체 컬러 */
+  .h-app {
+    --h-bg: #f5f6f8;
+    --h-card: #ffffff;
+    --h-card2: #f8f9fb;
+    --h-border: #e5e7eb;
+    --h-text: #1f2937;
+    --h-text2: #6b7280;
+    --h-text3: #9ca3af;
+    --h-accent: #10b981;
+    --h-accent-soft: #d1fae5;
+    --h-accent-text: #047857;
+    --h-warn: #f59e0b;
+    --h-danger: #ef4444;
+    --h-radius: 16px;
+    --h-radius-sm: 10px;
+    --h-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.04);
 
-  /* 상단 백 버튼 */
+    color: var(--h-text);
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  [data-theme="dark"] .h-app {
+    --h-bg: #0d0e12;
+    --h-card: #1a1c22;
+    --h-card2: #22252c;
+    --h-border: #2a2d35;
+    --h-text: #e5e7eb;
+    --h-text2: #9ca3af;
+    --h-text3: #6b7280;
+    --h-accent: #10b981;
+    --h-accent-soft: #064e3b;
+    --h-accent-text: #6ee7b7;
+    --h-shadow: none;
+  }
+
+  /* 상단 */
   .h-top {
     display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 14px;
+    margin-bottom: 16px;
   }
   .h-back {
-    background: none; border: 1px solid var(--border);
-    color: var(--text2); padding: 8px 14px;
-    text-decoration: none; font-size: 0.9em;
-    transition: all 0.15s; min-height: 38px;
-    display: inline-flex; align-items: center;
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--h-card); color: var(--h-text2);
+    padding: 9px 14px; border-radius: 999px;
+    text-decoration: none; font-size: 14px; font-weight: 500;
+    border: 1px solid var(--h-border);
+    transition: all 0.15s;
   }
-  .h-back:hover, .h-back:active { border-color: var(--accent); color: var(--accent); }
+  .h-back:active { background: var(--h-card2); }
 
   .h-day-tag {
-    font-family: 'Press Start 2P', cursive; font-size: 0.55em;
-    color: var(--text2);
+    font-size: 13px; color: var(--h-text2);
+    background: var(--h-card); padding: 6px 12px;
+    border-radius: 999px; border: 1px solid var(--h-border);
+    font-weight: 500;
   }
 
-  /* HERO - 콤팩트 */
+  /* HERO */
   .h-hero {
-    background: var(--card);
-    border: 2px solid var(--accent);
-    padding: 16px;
+    background: linear-gradient(135deg, var(--h-accent) 0%, #059669 100%);
+    color: #fff;
+    border-radius: var(--h-radius);
+    padding: 22px 22px;
     margin-bottom: 16px;
-    box-shadow: 0 0 14px rgba(0,255,65,0.10);
+    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.25);
   }
   .h-hero-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 14px;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 16px; margin-bottom: 18px;
   }
-  .h-stat {
-    border-left: 3px solid var(--accent);
-    padding-left: 10px;
+  .h-stat-label {
+    font-size: 12px; opacity: 0.85;
+    margin-bottom: 4px; font-weight: 500;
   }
-  .h-stat-label { font-size: 0.72em; color: var(--text2); margin-bottom: 4px; }
   .h-stat-value {
-    font-family: 'Press Start 2P', cursive;
-    font-size: 0.8em; color: var(--text);
-    line-height: 1.3;
+    font-size: 24px; font-weight: 700;
+    line-height: 1.2; letter-spacing: -0.5px;
   }
-  .h-stat-sub { font-size: 0.7em; color: var(--text2); margin-top: 4px; }
+  .h-stat-sub {
+    font-size: 12px; opacity: 0.85; margin-top: 4px;
+  }
 
   .h-progress-label {
     display: flex; justify-content: space-between;
-    font-size: 0.78em; color: var(--text2);
-    margin-bottom: 6px;
-    padding-top: 12px;
-    border-top: 1px dashed var(--border);
+    font-size: 13px; margin-bottom: 8px;
+    opacity: 0.95; font-weight: 500;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,0.2);
   }
   .h-progress-bar {
-    height: 14px; background: var(--bg2);
-    border: 1px solid var(--border); position: relative; overflow: hidden;
+    height: 8px; background: rgba(255,255,255,0.25);
+    border-radius: 999px; overflow: hidden;
   }
   .h-progress-fill {
-    height: 100%; background: var(--accent);
-    transition: width 0.4s ease;
-    box-shadow: 0 0 10px rgba(0,255,65,0.5);
+    height: 100%; background: #fff;
+    border-radius: 999px; transition: width 0.5s ease;
+  }
+
+  /* 카드 */
+  .h-card {
+    background: var(--h-card);
+    border-radius: var(--h-radius);
+    padding: 18px 18px;
+    margin-bottom: 14px;
+    box-shadow: var(--h-shadow);
+    border: 1px solid var(--h-border);
+  }
+  .h-card-title {
+    font-size: 15px; font-weight: 700;
+    color: var(--h-text); margin-bottom: 14px;
+    letter-spacing: -0.3px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .h-card-title::before {
+    content: ''; width: 4px; height: 16px;
+    background: var(--h-accent); border-radius: 2px;
+  }
+  .h-card-sub {
+    font-size: 13px; color: var(--h-text2);
+    margin-bottom: 14px; line-height: 1.6;
   }
 
   /* 패널 */
-  .h-panel { display: none; animation: fadeIn 0.2s; }
+  .h-panel { display: none; animation: fadeIn 0.25s; }
   .h-panel.active { display: block; }
-  @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(4px);} to{opacity:1;transform:translateY(0);} }
 
-  .h-card {
-    background: var(--card); border: 1px solid var(--border);
-    padding: 16px; margin-bottom: 14px;
-  }
-  .h-card-title {
-    font-family: 'Press Start 2P', cursive; font-size: 0.6em;
-    color: var(--accent); margin-bottom: 12px;
-  }
-  .h-card-sub { font-size: 0.85em; color: var(--text2); margin-bottom: 12px; line-height: 1.6; }
-
-  /* 일정표 - 모바일 가로 스크롤 */
+  /* 주간 일정 */
   .h-week {
-    display: grid;
-    grid-template-columns: repeat(7, minmax(60px, 1fr));
-    gap: 5px;
-    overflow-x: auto;
-    padding-bottom: 4px;
+    display: grid; grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
   }
   .h-day {
-    background: var(--bg2); border: 1px solid var(--border);
+    background: var(--h-card2);
+    border-radius: var(--h-radius-sm);
     padding: 10px 4px; text-align: center;
+    border: 1px solid transparent;
+    transition: all 0.15s;
   }
-  .h-day-label { font-family: 'Press Start 2P', cursive; font-size: 0.45em; color: var(--text2); margin-bottom: 6px; }
-  .h-day-content { font-size: 0.72em; color: var(--text); line-height: 1.4; }
+  .h-day-label {
+    font-size: 11px; color: var(--h-text3);
+    margin-bottom: 6px; font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .h-day-content {
+    font-size: 12px; color: var(--h-text);
+    line-height: 1.4; font-weight: 500;
+  }
   .h-day.rest { opacity: 0.5; }
-  .h-day.cardio { border-color: var(--accent); }
-  .h-day.today { border-color: var(--accent); background: var(--card); box-shadow: 0 0 8px rgba(0,255,65,0.3); }
+  .h-day.cardio { background: rgba(16, 185, 129, 0.08); }
+  .h-day.today {
+    background: var(--h-accent);
+    border-color: var(--h-accent);
+  }
+  .h-day.today .h-day-label,
+  .h-day.today .h-day-content { color: #fff; }
 
   /* 운동 항목 */
   .h-exer {
-    display: flex; align-items: center; gap: 10px;
-    padding: 12px;
-    background: var(--bg2); border: 1px solid var(--border);
-    margin-bottom: 6px;
-    min-height: 56px;
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 14px;
+    background: var(--h-card2);
+    border-radius: var(--h-radius-sm);
+    margin-bottom: 8px;
   }
   .h-exer-num {
-    font-family: 'Press Start 2P', cursive; font-size: 0.7em;
-    color: var(--accent); width: 24px; flex-shrink: 0;
+    width: 28px; height: 28px;
+    background: var(--h-accent-soft);
+    color: var(--h-accent-text);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700;
+    flex-shrink: 0;
   }
   .h-exer-info { flex: 1; min-width: 0; }
   .h-exer-name {
-    font-size: 0.92em; color: var(--text);
-    margin-bottom: 3px; line-height: 1.3;
+    font-size: 14px; color: var(--h-text);
+    margin-bottom: 3px; font-weight: 600;
+    line-height: 1.3;
   }
-  .h-exer-muscle { font-size: 0.75em; color: var(--text2); }
+  .h-exer-muscle {
+    font-size: 12px; color: var(--h-text2);
+  }
   .h-exer-set {
-    font-family: 'Press Start 2P', cursive; font-size: 0.5em;
-    color: var(--text); background: var(--card);
-    padding: 6px 8px; border: 1px solid var(--border);
+    font-size: 12px; font-weight: 600;
+    color: var(--h-accent-text);
+    background: var(--h-accent-soft);
+    padding: 6px 10px; border-radius: 999px;
     flex-shrink: 0; white-space: nowrap;
   }
 
   /* 식단 */
   .h-meal {
-    background: var(--bg2); border: 1px solid var(--border);
-    padding: 12px 14px; margin-bottom: 8px;
+    background: var(--h-card2);
+    border-radius: var(--h-radius-sm);
+    padding: 14px;
+    margin-bottom: 8px;
   }
   .h-meal-head {
     display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
   }
   .h-meal-time {
-    font-family: 'Press Start 2P', cursive; font-size: 0.55em; color: var(--accent);
+    font-size: 13px; font-weight: 700;
+    color: var(--h-text);
   }
-  .h-meal-kcal { font-size: 0.78em; color: var(--text2); }
-  .h-meal-items { font-size: 0.88em; line-height: 1.7; padding-left: 18px; }
+  .h-meal-kcal {
+    font-size: 12px; color: var(--h-accent-text);
+    background: var(--h-accent-soft);
+    padding: 4px 10px; border-radius: 999px;
+    font-weight: 600;
+  }
+  .h-meal-items {
+    font-size: 13px; line-height: 1.8;
+    padding-left: 16px; color: var(--h-text);
+  }
   .h-meal-items li { margin-bottom: 2px; }
 
-  /* 트래커 - 큰 터치영역 */
+  /* 트래커 행 */
   .h-row {
     display: flex; align-items: center; gap: 12px;
-    padding: 12px 14px;
-    background: var(--bg2); border: 1px solid var(--border);
-    margin-bottom: 6px;
-    min-height: 54px;
+    padding: 14px 14px;
+    background: var(--h-card2);
+    border-radius: var(--h-radius-sm);
+    margin-bottom: 8px;
+    min-height: 56px;
   }
+  .h-row-label {
+    flex: 1; font-size: 14px;
+    color: var(--h-text); font-weight: 500;
+  }
+
+  /* 체크박스 */
   .h-check {
-    width: 32px; height: 32px;
-    border: 2px solid var(--border);
-    background: var(--card); cursor: pointer;
-    flex-shrink: 0; transition: all 0.15s;
+    width: 28px; height: 28px;
+    border: 2px solid var(--h-border);
+    background: var(--h-card);
+    border-radius: 8px;
+    cursor: pointer; flex-shrink: 0;
+    transition: all 0.15s;
     display: flex; align-items: center; justify-content: center;
     -webkit-tap-highlight-color: transparent;
   }
   .h-check.checked {
-    background: var(--accent); border-color: var(--accent);
+    background: var(--h-accent);
+    border-color: var(--h-accent);
   }
   .h-check.checked::after {
-    content: '✓'; color: var(--bg); font-weight: bold;
-    font-size: 1em;
+    content: ''; width: 14px; height: 8px;
+    border-left: 2.5px solid #fff;
+    border-bottom: 2.5px solid #fff;
+    transform: rotate(-45deg) translate(1px, -2px);
   }
   .h-check:active { transform: scale(0.92); }
 
-  /* 입력 - iOS 줌 방지 16px */
+  /* 입력 */
   .h-input, .h-textarea, .h-select {
-    background: var(--bg); border: 1px solid var(--border);
-    color: var(--text); padding: 10px 12px;
-    font-family: 'Pretendard', sans-serif; font-size: 16px;
-    width: 100%; transition: border 0.15s;
-    box-sizing: border-box; min-height: 44px;
+    background: var(--h-card2);
+    border: 1.5px solid var(--h-border);
+    color: var(--h-text);
+    padding: 12px 14px;
+    font-family: inherit;
+    font-size: 16px;
+    width: 100%;
+    border-radius: var(--h-radius-sm);
+    box-sizing: border-box;
+    min-height: 46px;
     -webkit-appearance: none; appearance: none;
-    border-radius: 0;
+    transition: all 0.15s;
   }
-  .h-input:focus, .h-textarea:focus, .h-select:focus { border-color: var(--accent); outline: none; }
-  .h-textarea { resize: vertical; min-height: 70px; }
+  .h-input:focus, .h-textarea:focus, .h-select:focus {
+    border-color: var(--h-accent);
+    background: var(--h-card);
+    outline: none;
+  }
+  .h-textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
   .h-input-sm {
-    padding: 8px 10px; font-size: 16px; min-height: 40px;
+    padding: 8px 12px; min-height: 38px;
     width: 90px; flex-shrink: 0;
+    text-align: center; font-weight: 600;
   }
 
   /* 버튼 */
   .h-btn {
-    background: var(--accent); color: var(--bg);
-    border: none; padding: 14px 20px; cursor: pointer;
-    font-family: 'Press Start 2P', cursive; font-size: 0.6em;
-    transition: opacity 0.15s; width: 100%;
-    min-height: 48px;
+    background: var(--h-accent);
+    color: #fff; border: none;
+    padding: 14px 20px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 15px; font-weight: 600;
+    border-radius: var(--h-radius-sm);
+    width: 100%; min-height: 50px;
+    transition: all 0.15s;
     -webkit-tap-highlight-color: transparent;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
   }
-  .h-btn:active { opacity: 0.75; }
+  .h-btn:active {
+    transform: scale(0.98);
+    background: #059669;
+  }
   .h-btn-ghost {
-    background: none; color: var(--text2);
-    border: 1px solid var(--border);
-    padding: 12px 16px; cursor: pointer;
-    font-family: 'Pretendard', sans-serif; font-size: 0.88em;
-    transition: all 0.15s; min-height: 44px;
+    background: var(--h-card2);
+    color: var(--h-text);
+    border: 1px solid var(--h-border);
+    padding: 12px 16px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px; font-weight: 500;
+    border-radius: var(--h-radius-sm);
+    min-height: 44px;
+    transition: all 0.15s;
     -webkit-tap-highlight-color: transparent;
   }
-  .h-btn-ghost:active { border-color: var(--accent); color: var(--accent); }
-
-  .h-form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 12px;
+  .h-btn-ghost:active { background: var(--h-card); }
+  .h-btn-danger {
+    color: var(--h-danger) !important;
+    border-color: var(--h-danger) !important;
   }
-  .h-field { margin-bottom: 12px; }
-  .h-field-label { font-size: 0.78em; color: var(--text2); margin-bottom: 6px; }
+
+  /* 폼 그리드 */
+  .h-form-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 10px; margin-bottom: 12px;
+  }
+  .h-field { margin-bottom: 14px; }
+  .h-field-label {
+    font-size: 13px; color: var(--h-text2);
+    margin-bottom: 6px; font-weight: 500;
+  }
 
   .h-btn-row {
-    display: flex; gap: 8px; flex-wrap: wrap;
-    margin-top: 12px;
+    display: flex; gap: 8px; margin-top: 10px;
   }
-  .h-btn-row .h-btn-ghost { flex: 1; min-width: 100px; }
+  .h-btn-row .h-btn-ghost { flex: 1; }
 
   /* PHASE */
   .h-phase {
-    background: var(--bg2); border-left: 3px solid var(--accent);
-    padding: 14px; margin-bottom: 10px;
+    background: var(--h-card2);
+    border-radius: var(--h-radius-sm);
+    padding: 16px;
+    margin-bottom: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+  .h-phase::before {
+    content: ''; position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px; background: var(--h-accent);
   }
   .h-phase-title {
-    font-family: 'Press Start 2P', cursive; font-size: 0.62em;
-    color: var(--accent); margin-bottom: 8px; line-height: 1.5;
+    font-size: 15px; font-weight: 700;
+    color: var(--h-text);
+    margin-bottom: 6px;
   }
-  .h-phase-meta { font-size: 0.85em; color: var(--text); margin-bottom: 6px; }
-  .h-phase-detail { font-size: 0.85em; color: var(--text2); line-height: 1.7; }
+  .h-phase-meta {
+    font-size: 13px; color: var(--h-accent-text);
+    margin-bottom: 8px; font-weight: 600;
+  }
+  .h-phase-detail {
+    font-size: 13px; color: var(--h-text2);
+    line-height: 1.7;
+  }
 
-  /* ALERT */
+  /* 알림 */
   .h-alert {
-    background: rgba(0,255,65,0.08); border: 1px solid var(--accent);
-    color: var(--accent); padding: 12px 14px;
-    font-size: 0.85em; margin-bottom: 14px;
+    background: var(--h-accent-soft);
+    color: var(--h-accent-text);
+    border-radius: var(--h-radius-sm);
+    padding: 12px 16px;
+    font-size: 14px; font-weight: 600;
+    margin-bottom: 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .h-alert::before {
+    content: '●'; font-size: 8px;
   }
 
   /* 차트 */
@@ -250,76 +404,261 @@ permalink: /health/
     position: relative; height: 240px;
   }
 
+  /* 달력 */
+  .h-cal-head {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 14px;
+  }
+  .h-cal-month {
+    font-size: 16px; font-weight: 700;
+    color: var(--h-text);
+  }
+  .h-cal-nav {
+    display: flex; gap: 6px;
+  }
+  .h-cal-nav-btn {
+    width: 36px; height: 36px;
+    background: var(--h-card2);
+    border: 1px solid var(--h-border);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--h-text); font-size: 14px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .h-cal-nav-btn:active { background: var(--h-card); }
+
+  .h-cal-grid {
+    display: grid; grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+  }
+  .h-cal-dow {
+    text-align: center; font-size: 11px;
+    color: var(--h-text3); font-weight: 600;
+    padding: 6px 0;
+  }
+  .h-cal-dow.sun { color: #ef4444; }
+  .h-cal-dow.sat { color: #3b82f6; }
+
+  .h-cal-day {
+    aspect-ratio: 1;
+    background: var(--h-card2);
+    border-radius: 10px;
+    padding: 4px;
+    display: flex; flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+    overflow: hidden;
+  }
+  .h-cal-day.empty { background: transparent; cursor: default; }
+  .h-cal-day:not(.empty):active { transform: scale(0.95); }
+  .h-cal-day-num {
+    font-size: 13px; font-weight: 600;
+    color: var(--h-text);
+    line-height: 1;
+  }
+  .h-cal-day-num.sun { color: #ef4444; }
+  .h-cal-day-num.sat { color: #3b82f6; }
+
+  .h-cal-day.today {
+    border-color: var(--h-accent);
+    background: var(--h-accent-soft);
+  }
+  .h-cal-day.today .h-cal-day-num {
+    color: var(--h-accent-text);
+  }
+
+  .h-cal-day.future {
+    opacity: 0.45;
+  }
+
+  /* 점 표시 */
+  .h-cal-dots {
+    display: flex; gap: 2px; flex-wrap: wrap;
+    justify-content: center;
+  }
+  .h-cal-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--h-border);
+  }
+  .h-cal-dot.workout { background: #10b981; }
+  .h-cal-dot.cardio { background: #3b82f6; }
+  .h-cal-dot.diet { background: #f59e0b; }
+  .h-cal-dot.weight { background: #8b5cf6; }
+
+  /* 완료 배지 (전체 달성한 날) */
+  .h-cal-day.perfect::before {
+    content: ''; position: absolute;
+    inset: 0; background: linear-gradient(135deg, rgba(16,185,129,0.25) 0%, rgba(16,185,129,0.08) 100%);
+    pointer-events: none;
+  }
+  .h-cal-day.perfect {
+    border-color: rgba(16,185,129,0.5);
+  }
+
+  /* 휴식일 표시 */
+  .h-cal-day.rest::after {
+    content: '쉼'; position: absolute;
+    bottom: 3px; right: 4px;
+    font-size: 9px; color: var(--h-text3);
+    font-weight: 600;
+  }
+
+  /* 범례 */
+  .h-cal-legend {
+    display: flex; flex-wrap: wrap; gap: 12px;
+    margin-top: 14px; padding-top: 14px;
+    border-top: 1px solid var(--h-border);
+    font-size: 12px; color: var(--h-text2);
+  }
+  .h-cal-legend-item {
+    display: flex; align-items: center; gap: 5px;
+  }
+
+  /* 월간 요약 */
+  .h-cal-summary {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 8px; margin-top: 14px;
+  }
+  .h-cal-sum-box {
+    background: var(--h-card2);
+    border-radius: var(--h-radius-sm);
+    padding: 10px 8px; text-align: center;
+  }
+  .h-cal-sum-val {
+    font-size: 18px; font-weight: 700;
+    color: var(--h-accent-text);
+    line-height: 1;
+  }
+  .h-cal-sum-label {
+    font-size: 11px; color: var(--h-text2);
+    margin-top: 4px;
+  }
+
   /* 히스토리 */
   .h-hist-item {
-    display: flex; gap: 10px; align-items: center;
-    padding: 12px; background: var(--bg2);
-    border: 1px solid var(--border); margin-bottom: 6px;
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px;
+    background: var(--h-card2);
+    border-radius: var(--h-radius-sm);
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
   }
+  .h-hist-item:active { background: var(--h-card); }
   .h-hist-date {
-    font-family: 'Press Start 2P', cursive; font-size: 0.5em;
-    color: var(--accent); width: 60px; flex-shrink: 0;
+    font-size: 13px; font-weight: 700;
+    color: var(--h-accent-text);
+    width: 50px; flex-shrink: 0;
   }
-  .h-hist-info { flex: 1; min-width: 0; font-size: 0.85em; }
-  .h-hist-icon { font-size: 0.85em; flex-shrink: 0; }
+  .h-hist-info {
+    flex: 1; min-width: 0;
+    font-size: 13px; color: var(--h-text);
+  }
+  .h-hist-icon {
+    font-size: 14px; flex-shrink: 0;
+  }
 
-  /* DASH 카드 */
+  /* TODAY 박스 */
   .h-today-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: grid; grid-template-columns: 1fr 1fr;
     gap: 10px;
   }
   .h-today-box {
-    padding: 14px; background: var(--bg2);
-    border: 1px solid var(--border);
+    padding: 14px;
+    background: var(--h-card2);
+    border-radius: var(--h-radius-sm);
   }
   .h-today-box-title {
-    font-family: 'Press Start 2P', cursive; font-size: 0.5em;
-    color: var(--accent); margin-bottom: 6px;
+    font-size: 11px; color: var(--h-text3);
+    margin-bottom: 6px; font-weight: 600;
+    letter-spacing: 0.5px; text-transform: uppercase;
   }
-  .h-today-box-val { font-size: 0.95em; color: var(--text); }
+  .h-today-box-val {
+    font-size: 14px; color: var(--h-text);
+    font-weight: 600; line-height: 1.4;
+  }
 
   .h-summary {
-    margin-top: 12px; padding: 12px;
-    background: var(--bg2); border: 1px dashed var(--border);
-    font-size: 0.88em; color: var(--text); line-height: 1.6;
+    margin-top: 14px; padding: 12px 16px;
+    background: var(--h-accent-soft);
+    color: var(--h-accent-text);
+    border-radius: var(--h-radius-sm);
+    font-size: 14px; line-height: 1.6;
+    font-weight: 500;
   }
 
-  /* 하단 탭바 - 핵심 */
+  /* 하단 네비 */
   .h-bottom-nav {
     position: fixed;
     bottom: 0; left: 0; right: 0;
-    background: var(--card);
-    border-top: 2px solid var(--accent);
+    background: var(--h-card);
+    border-top: 1px solid var(--h-border);
     display: flex;
     z-index: 100;
-    box-shadow: 0 -2px 12px rgba(0,0,0,0.4);
     padding-bottom: env(safe-area-inset-bottom);
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.04);
+  }
+  [data-theme="dark"] .h-bottom-nav {
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.3);
   }
   .h-nav-btn {
     flex: 1; background: none; border: none;
-    padding: 10px 4px 12px;
-    color: var(--text2); cursor: pointer;
+    padding: 10px 4px 10px;
+    color: var(--h-text3); cursor: pointer;
     display: flex; flex-direction: column;
     align-items: center; gap: 4px;
     transition: color 0.15s;
     min-height: 60px;
     -webkit-tap-highlight-color: transparent;
+    font-family: inherit;
   }
-  .h-nav-btn:active { background: var(--bg2); }
+  .h-nav-btn:active { background: var(--h-card2); }
   .h-nav-icon {
-    font-size: 1.4em; line-height: 1;
+    font-size: 22px; line-height: 1;
   }
   .h-nav-label {
-    font-family: 'Press Start 2P', cursive;
-    font-size: 0.45em; letter-spacing: 0.05em;
+    font-size: 11px; font-weight: 600;
   }
-  .h-nav-btn.active { color: var(--accent); }
-  .h-nav-btn.active .h-nav-icon {
-    text-shadow: 0 0 8px var(--accent);
+  .h-nav-btn.active { color: var(--h-accent); }
+
+  /* 식품 룰 */
+  .h-rules {
+    list-style: none; padding: 0;
+  }
+  .h-rules li {
+    display: flex; gap: 10px;
+    padding: 10px 0;
+    font-size: 14px; color: var(--h-text);
+    line-height: 1.5;
+    border-bottom: 1px solid var(--h-border);
+  }
+  .h-rules li:last-child { border-bottom: none; }
+  .h-rules li::before {
+    content: '✓'; color: var(--h-accent);
+    font-weight: 700; flex-shrink: 0;
   }
 
-  /* 데스크톱은 좀 넓게 */
+  /* 쇼핑 리스트 */
+  .h-shop-section {
+    margin-bottom: 14px;
+  }
+  .h-shop-section:last-child { margin-bottom: 0; }
+  .h-shop-title {
+    font-size: 13px; font-weight: 700;
+    color: var(--h-accent-text);
+    margin-bottom: 6px;
+  }
+  .h-shop-items {
+    font-size: 13px; color: var(--h-text);
+    line-height: 1.7;
+  }
+
   @media(min-width: 700px) {
     main { max-width: 720px !important; }
     .h-hero-row { grid-template-columns: repeat(4, 1fr); }
@@ -329,29 +668,29 @@ permalink: /health/
 <div class="h-app">
   <!-- 상단 -->
   <div class="h-top">
-    <a href="/" class="h-back">&lt; menu</a>
+    <a href="/" class="h-back">← 메뉴</a>
     <span class="h-day-tag" id="top-tag">--</span>
   </div>
 
   <!-- HERO -->
   <div class="h-hero">
     <div class="h-hero-row">
-      <div class="h-stat">
+      <div>
         <div class="h-stat-label">현재 체중</div>
         <div class="h-stat-value" id="hero-weight">71.4kg</div>
         <div class="h-stat-sub" id="hero-weight-diff">시작 ±0.0</div>
       </div>
-      <div class="h-stat">
+      <div>
         <div class="h-stat-label">목표</div>
         <div class="h-stat-value">65.0kg</div>
         <div class="h-stat-sub" id="hero-remain">-6.4 남음</div>
       </div>
-      <div class="h-stat">
+      <div>
         <div class="h-stat-label">D-DAY</div>
         <div class="h-stat-value" id="hero-dday">D-90</div>
         <div class="h-stat-sub" id="hero-goal-date">07-27</div>
       </div>
-      <div class="h-stat">
+      <div>
         <div class="h-stat-label">체지방률</div>
         <div class="h-stat-value" id="hero-bf">25.2%</div>
         <div class="h-stat-sub">목표 18%</div>
@@ -369,19 +708,19 @@ permalink: /health/
   <!-- DASHBOARD -->
   <div class="h-panel active" id="panel-dashboard">
     <div class="h-card">
-      <div class="h-card-title">// TODAY</div>
-      <div id="today-info" style="font-size:0.88em;color:var(--text2);margin-bottom:12px;line-height:1.6;"></div>
+      <div class="h-card-title">오늘의 미션</div>
+      <div id="today-info" style="font-size:13px;color:var(--h-text2);margin-bottom:14px;line-height:1.6;"></div>
       <div class="h-today-grid" id="today-content"></div>
     </div>
 
     <div class="h-card">
-      <div class="h-card-title">// QUICK CHECK</div>
+      <div class="h-card-title">체크리스트</div>
       <div id="today-checks"></div>
       <button class="h-btn-ghost" style="width:100%;margin-top:8px;" onclick="goTab('tracker')">상세 기록 →</button>
     </div>
 
     <div class="h-card">
-      <div class="h-card-title">// LAST 7 DAYS</div>
+      <div class="h-card-title">최근 7일</div>
       <div id="recent-7"></div>
     </div>
   </div>
@@ -389,45 +728,45 @@ permalink: /health/
   <!-- PLAN -->
   <div class="h-panel" id="panel-plan">
     <div class="h-card">
-      <div class="h-card-title">// 90-DAY ROADMAP</div>
-      <div class="h-card-sub">3단계로 점진적 감량. 현재 단계는 자동 표시.</div>
+      <div class="h-card-title">90일 로드맵</div>
+      <div class="h-card-sub">3단계로 점진적 감량. 단계는 자동으로 전환됩니다.</div>
       <div class="h-phase">
-        <div class="h-phase-title">PHASE 1<br>적응기 (1-30일)</div>
-        <div class="h-phase-meta">목표 -2kg | 1700 kcal · 단백질 140g</div>
+        <div class="h-phase-title">PHASE 1 · 적응기</div>
+        <div class="h-phase-meta">1~30일 · 1700 kcal · 단백질 140g</div>
         <div class="h-phase-detail">
-          식단 적응 + 운동 정착 (주5회)<br>
-          유산소 주2회 30분 LISS<br>
-          마지막 ≈ 69.4kg
+          식단 적응 + 운동 정착 (주 5회)<br>
+          유산소 주 2회 30분 LISS<br>
+          목표: -2kg (≈ 69.4kg)
         </div>
       </div>
       <div class="h-phase">
-        <div class="h-phase-title">PHASE 2<br>감량기 (31-60일)</div>
-        <div class="h-phase-meta">목표 -2kg | 1550 kcal · 단백질 140g</div>
+        <div class="h-phase-title">PHASE 2 · 감량기</div>
+        <div class="h-phase-meta">31~60일 · 1550 kcal · 단백질 140g</div>
         <div class="h-phase-detail">
           칼로리 컷 + 강도 유지<br>
-          유산소 주3회 30-40분<br>
-          마지막 ≈ 67.4kg
+          유산소 주 3회 30~40분<br>
+          목표: -2kg (≈ 67.4kg)
         </div>
       </div>
       <div class="h-phase">
-        <div class="h-phase-title">PHASE 3<br>커팅 (61-90일)</div>
-        <div class="h-phase-meta">목표 -2.4kg | 1400 kcal · 단백질 150g</div>
+        <div class="h-phase-title">PHASE 3 · 커팅</div>
+        <div class="h-phase-meta">61~90일 · 1400 kcal · 단백질 150g</div>
         <div class="h-phase-detail">
           마지막 커팅 (체지방 18%)<br>
-          유산소 주4회 + 인터벌<br>
-          마지막 ≈ 65.0kg
+          유산소 주 4회 + 인터벌<br>
+          목표: -2.4kg (≈ 65.0kg)
         </div>
       </div>
     </div>
 
     <div class="h-card">
-      <div class="h-card-title">// WEEKLY ROUTINE</div>
+      <div class="h-card-title">주간 일정</div>
       <div class="h-week" id="week-grid"></div>
     </div>
 
     <div class="h-card">
-      <div class="h-card-title">// SETUP</div>
-      <div class="h-card-sub">시작 정보를 한번만 설정하세요.</div>
+      <div class="h-card-title">설정</div>
+      <div class="h-card-sub">시작 정보를 한 번만 설정하세요.</div>
       <div class="h-field">
         <div class="h-field-label">시작 날짜</div>
         <input type="date" class="h-input" id="cfg-start-date">
@@ -446,85 +785,91 @@ permalink: /health/
         <div class="h-field-label">기간 (일)</div>
         <input type="number" inputmode="numeric" class="h-input" id="cfg-duration" value="90">
       </div>
-      <button class="h-btn" onclick="saveConfig()">SAVE</button>
+      <button class="h-btn" onclick="saveConfig()">저장</button>
       <div class="h-btn-row">
-        <button class="h-btn-ghost" onclick="exportData()">EXPORT</button>
-        <button class="h-btn-ghost" onclick="document.getElementById('import-file').click()">IMPORT</button>
+        <button class="h-btn-ghost" onclick="exportData()">내보내기</button>
+        <button class="h-btn-ghost" onclick="document.getElementById('import-file').click()">불러오기</button>
         <input type="file" id="import-file" style="display:none" accept=".json" onchange="importData(event)">
       </div>
-      <button class="h-btn-ghost" style="width:100%;margin-top:8px;color:#ff5e5e;border-color:#ff5e5e;" onclick="resetData()">RESET ALL</button>
+      <button class="h-btn-ghost h-btn-danger" style="width:100%;margin-top:8px;" onclick="resetData()">전체 초기화</button>
     </div>
   </div>
 
   <!-- WORKOUT -->
   <div class="h-panel" id="panel-workout">
     <div class="h-card">
-      <div class="h-card-title">// MON · 가슴 + 삼두</div>
-      <div class="h-card-sub">5종목 · 60-70분 · 휴식 60-90초</div>
+      <div class="h-card-title">월 · 가슴 + 삼두</div>
+      <div class="h-card-sub">5종목 · 60~70분 · 휴식 60~90초</div>
       <div id="w-chest"></div>
     </div>
     <div class="h-card">
-      <div class="h-card-title">// TUE · 등 + 이두</div>
-      <div class="h-card-sub">6종목 · 60-70분</div>
+      <div class="h-card-title">화 · 등 + 이두</div>
+      <div class="h-card-sub">6종목 · 60~70분</div>
       <div id="w-back"></div>
     </div>
     <div class="h-card">
-      <div class="h-card-title">// THU · 하체</div>
-      <div class="h-card-sub">6종목 · 70-80분</div>
+      <div class="h-card-title">목 · 하체</div>
+      <div class="h-card-sub">6종목 · 70~80분</div>
       <div id="w-legs"></div>
     </div>
     <div class="h-card">
-      <div class="h-card-title">// FRI · 어깨 + 팔</div>
+      <div class="h-card-title">금 · 어깨 + 팔</div>
       <div class="h-card-sub">6종목 · 60분</div>
       <div id="w-shoulder"></div>
     </div>
     <div class="h-card">
-      <div class="h-card-title">// WED, SAT · 유산소</div>
-      <div style="font-size:0.9em;line-height:1.8;color:var(--text);">
-        <b>WED</b> — LISS (빠른걷기/사이클) 30-40분, 심박 120-130<br>
-        <b>SAT</b> — 인터벌 (1분 빠르게/2분 천천히) × 10세트<br>
-        <span style="color:var(--text2);font-size:0.92em;">웨이트 후 추가 LISS 20분도 OK</span>
+      <div class="h-card-title">수, 토 · 유산소</div>
+      <div style="font-size:14px;line-height:1.8;color:var(--h-text);">
+        <b>수요일</b> — LISS (빠른걷기/사이클) 30~40분, 심박 120~130<br>
+        <b>토요일</b> — 인터벌 (1분 빠르게 / 2분 천천히) × 10세트<br>
+        <span style="color:var(--h-text2);font-size:13px;">웨이트 후 추가 LISS 20분도 OK</span>
       </div>
     </div>
   </div>
 
   <!-- DIET -->
   <div class="h-panel" id="panel-diet">
-    <div class="h-alert" id="diet-phase-alert">PHASE 1 — 1700 kcal · 단백질 140g</div>
+    <div class="h-alert" id="diet-phase-alert">PHASE 1 · 1700 kcal · 단백질 140g</div>
 
     <div class="h-card">
-      <div class="h-card-title">// PLAN A · 한식 베이스</div>
+      <div class="h-card-title">식단 A · 한식 베이스</div>
       <div id="meals-a"></div>
     </div>
 
     <div class="h-card">
-      <div class="h-card-title">// PLAN B · 양식 베이스</div>
+      <div class="h-card-title">식단 B · 양식 베이스</div>
       <div id="meals-b"></div>
     </div>
 
     <div class="h-card">
-      <div class="h-card-title">// FOOD RULES</div>
-      <ul style="font-size:0.9em;line-height:2;padding-left:20px;color:var(--text);">
-        <li>아침 30분 내 단백질 25g+</li>
-        <li>운동 후 단백질 30-40g + 빠른 탄수</li>
-        <li>물 하루 2.5-3L</li>
+      <div class="h-card-title">식단 규칙</div>
+      <ul class="h-rules">
+        <li>아침 30분 내 단백질 25g 이상</li>
+        <li>운동 후 단백질 30~40g + 빠른 탄수</li>
+        <li>물 하루 2.5~3L</li>
         <li>피하기: 가공식품 / 액상과당 / 튀김 / 음주</li>
         <li>치팅: 14일 1회, 점심 1끼만</li>
-        <li>주1회 인바디 (같은 시간대)</li>
+        <li>주 1회 인바디 측정 (같은 시간대)</li>
       </ul>
     </div>
 
     <div class="h-card">
-      <div class="h-card-title">// SHOPPING (주1회)</div>
-      <div style="font-size:0.88em;line-height:1.9;color:var(--text);">
-        <b style="color:var(--accent);">단백질</b><br>
-        닭가슴살 1.5kg / 계란 30개 / 그릭요거트 3통 / 두부 2모 / 연어 500g<br><br>
-        <b style="color:var(--accent);">탄수</b><br>
-        현미 2kg / 고구마 2kg / 오트밀 1봉 / 바나나 7개 / 사과 5개<br><br>
-        <b style="color:var(--accent);">채소</b><br>
-        브로콜리 / 양배추 / 시금치 / 토마토 / 양파<br><br>
-        <b style="color:var(--accent);">지방</b><br>
-        아보카도 / 아몬드 · 호두 / 올리브오일
+      <div class="h-card-title">장보기 (주 1회)</div>
+      <div class="h-shop-section">
+        <div class="h-shop-title">단백질</div>
+        <div class="h-shop-items">닭가슴살 1.5kg · 계란 30개 · 그릭요거트 3통 · 두부 2모 · 연어 500g</div>
+      </div>
+      <div class="h-shop-section">
+        <div class="h-shop-title">탄수화물</div>
+        <div class="h-shop-items">현미 2kg · 고구마 2kg · 오트밀 1봉 · 바나나 7개 · 사과 5개</div>
+      </div>
+      <div class="h-shop-section">
+        <div class="h-shop-title">채소</div>
+        <div class="h-shop-items">브로콜리 · 양배추 · 시금치 · 토마토 · 양파</div>
+      </div>
+      <div class="h-shop-section">
+        <div class="h-shop-title">지방</div>
+        <div class="h-shop-items">아보카도 · 아몬드 · 호두 · 올리브오일</div>
       </div>
     </div>
   </div>
@@ -532,12 +877,11 @@ permalink: /health/
   <!-- TRACKER -->
   <div class="h-panel" id="panel-tracker">
     <div class="h-card">
-      <div class="h-card-title">// DAILY LOG</div>
+      <div class="h-card-title">기본 정보</div>
       <div class="h-field">
         <div class="h-field-label">날짜</div>
         <input type="date" class="h-input" id="log-date" onchange="loadLog()">
       </div>
-
       <div class="h-form-grid">
         <div>
           <div class="h-field-label">체중 (kg)</div>
@@ -551,112 +895,145 @@ permalink: /health/
     </div>
 
     <div class="h-card">
-      <div class="h-card-title">// MEALS</div>
+      <div class="h-card-title">식사</div>
       <div class="h-row">
         <div class="h-check" data-meal="breakfast" onclick="toggleCheck(this)"></div>
-        <span style="flex:1;">아침</span>
+        <span class="h-row-label">아침</span>
         <input type="number" inputmode="numeric" class="h-input h-input-sm" id="kcal-breakfast" placeholder="kcal">
       </div>
       <div class="h-row">
         <div class="h-check" data-meal="lunch" onclick="toggleCheck(this)"></div>
-        <span style="flex:1;">점심</span>
+        <span class="h-row-label">점심</span>
         <input type="number" inputmode="numeric" class="h-input h-input-sm" id="kcal-lunch" placeholder="kcal">
       </div>
       <div class="h-row">
         <div class="h-check" data-meal="snack" onclick="toggleCheck(this)"></div>
-        <span style="flex:1;">간식</span>
+        <span class="h-row-label">간식</span>
         <input type="number" inputmode="numeric" class="h-input h-input-sm" id="kcal-snack" placeholder="kcal">
       </div>
       <div class="h-row">
         <div class="h-check" data-meal="dinner" onclick="toggleCheck(this)"></div>
-        <span style="flex:1;">저녁</span>
+        <span class="h-row-label">저녁</span>
         <input type="number" inputmode="numeric" class="h-input h-input-sm" id="kcal-dinner" placeholder="kcal">
       </div>
     </div>
 
     <div class="h-card">
-      <div class="h-card-title">// TRAINING</div>
+      <div class="h-card-title">운동</div>
       <div class="h-row">
         <div class="h-check" data-act="workout" onclick="toggleCheck(this)"></div>
-        <span style="flex:1;">웨이트</span>
+        <span class="h-row-label">웨이트</span>
       </div>
-      <select class="h-select" id="workout-type" style="margin-bottom:6px;">
+      <select class="h-select" id="workout-type" style="margin-bottom:8px;">
         <option value="">부위 선택</option>
-        <option value="chest">가슴+삼두</option>
-        <option value="back">등+이두</option>
+        <option value="chest">가슴 + 삼두</option>
+        <option value="back">등 + 이두</option>
         <option value="legs">하체</option>
-        <option value="shoulder">어깨+팔</option>
+        <option value="shoulder">어깨 + 팔</option>
       </select>
       <div class="h-row">
         <div class="h-check" data-act="cardio" onclick="toggleCheck(this)"></div>
-        <span style="flex:1;">유산소</span>
+        <span class="h-row-label">유산소</span>
         <input type="number" inputmode="numeric" class="h-input h-input-sm" id="cardio-min" placeholder="분">
       </div>
     </div>
 
     <div class="h-card">
-      <div class="h-card-title">// NOTES</div>
+      <div class="h-card-title">메모</div>
       <textarea class="h-textarea" id="log-notes" placeholder="컨디션, 식욕, 수면..."></textarea>
     </div>
 
-    <button class="h-btn" onclick="saveLog()">SAVE LOG</button>
-    <button class="h-btn-ghost" style="width:100%;margin-top:8px;color:#ff5e5e;border-color:#ff5e5e;" onclick="deleteLog()">DELETE</button>
+    <button class="h-btn" onclick="saveLog()" id="save-btn">저장</button>
+    <button class="h-btn-ghost h-btn-danger" style="width:100%;margin-top:8px;" onclick="deleteLog()">삭제</button>
+    <div id="log-summary" class="h-summary" style="display:none;"></div>
+  </div>
 
-    <div id="log-summary" class="h-summary" style="margin-top:14px;display:none;"></div>
+  <!-- CALENDAR -->
+  <div class="h-panel" id="panel-calendar">
+    <div class="h-card">
+      <div class="h-cal-head">
+        <button class="h-cal-nav-btn" onclick="changeCalMonth(-1)">‹</button>
+        <div class="h-cal-month" id="cal-month-label">--</div>
+        <button class="h-cal-nav-btn" onclick="changeCalMonth(1)">›</button>
+      </div>
+
+      <div class="h-cal-grid" style="margin-bottom:6px;">
+        <div class="h-cal-dow sun">일</div>
+        <div class="h-cal-dow">월</div>
+        <div class="h-cal-dow">화</div>
+        <div class="h-cal-dow">수</div>
+        <div class="h-cal-dow">목</div>
+        <div class="h-cal-dow">금</div>
+        <div class="h-cal-dow sat">토</div>
+      </div>
+      <div class="h-cal-grid" id="cal-grid"></div>
+
+      <div class="h-cal-legend">
+        <div class="h-cal-legend-item"><div class="h-cal-dot workout"></div>운동</div>
+        <div class="h-cal-legend-item"><div class="h-cal-dot cardio"></div>유산소</div>
+        <div class="h-cal-legend-item"><div class="h-cal-dot diet"></div>식단</div>
+        <div class="h-cal-legend-item"><div class="h-cal-dot weight"></div>체중</div>
+      </div>
+
+      <div class="h-cal-summary" id="cal-summary"></div>
+    </div>
   </div>
 
   <!-- STATS -->
   <div class="h-panel" id="panel-stats">
     <div class="h-card">
-      <div class="h-card-title">// WEIGHT TREND</div>
+      <div class="h-card-title">체중 추이</div>
       <div id="weight-chart-wrap">
         <canvas id="weight-chart"></canvas>
       </div>
     </div>
 
     <div class="h-card">
-      <div class="h-card-title">// COMPLIANCE</div>
-      <div id="compliance" style="font-size:0.92em;line-height:2;"></div>
+      <div class="h-card-title">달성률</div>
+      <div id="compliance" style="font-size:14px;line-height:2;color:var(--h-text);"></div>
     </div>
 
     <div class="h-card">
-      <div class="h-card-title">// HISTORY</div>
+      <div class="h-card-title">전체 기록</div>
       <div id="history-list"></div>
     </div>
   </div>
 </div>
 
-<!-- 하단 탭바 -->
+<!-- 하단 네비 -->
 <nav class="h-bottom-nav">
   <button class="h-nav-btn active" data-tab="dashboard" onclick="goTab('dashboard')">
-    <span class="h-nav-icon">▦</span>
-    <span class="h-nav-label">DASH</span>
+    <span class="h-nav-icon">⌂</span>
+    <span class="h-nav-label">홈</span>
   </button>
   <button class="h-nav-btn" data-tab="plan" onclick="goTab('plan')">
     <span class="h-nav-icon">◇</span>
-    <span class="h-nav-label">PLAN</span>
+    <span class="h-nav-label">계획</span>
   </button>
   <button class="h-nav-btn" data-tab="workout" onclick="goTab('workout')">
-    <span class="h-nav-icon">▲</span>
-    <span class="h-nav-label">GYM</span>
+    <span class="h-nav-icon">◈</span>
+    <span class="h-nav-label">운동</span>
   </button>
   <button class="h-nav-btn" data-tab="diet" onclick="goTab('diet')">
-    <span class="h-nav-icon">●</span>
-    <span class="h-nav-label">DIET</span>
+    <span class="h-nav-icon">○</span>
+    <span class="h-nav-label">식단</span>
   </button>
   <button class="h-nav-btn" data-tab="tracker" onclick="goTab('tracker')">
     <span class="h-nav-icon">✎</span>
-    <span class="h-nav-label">LOG</span>
+    <span class="h-nav-label">기록</span>
+  </button>
+  <button class="h-nav-btn" data-tab="calendar" onclick="goTab('calendar')">
+    <span class="h-nav-icon">▦</span>
+    <span class="h-nav-label">달력</span>
   </button>
   <button class="h-nav-btn" data-tab="stats" onclick="goTab('stats')">
-    <span class="h-nav-icon">▰</span>
-    <span class="h-nav-label">STATS</span>
+    <span class="h-nav-icon">▤</span>
+    <span class="h-nav-label">통계</span>
   </button>
 </nav>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
-  // ============ DATA ============
   const STORAGE_KEY = 'truebird_health_v1';
   const DEFAULT_DATA = {
     config: {
@@ -679,7 +1056,6 @@ permalink: /health/
   }
   function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA)); }
 
-  // ============ EXERCISES ============
   const WORKOUTS = {
     chest: [
       { name: '바벨 플랫 벤치 프레스', muscle: '가슴, 삼두', sets: '4×8-10' },
@@ -727,7 +1103,6 @@ permalink: /health/
     { time: '저녁 19:00', kcal: 420, items: ['연어 스테이크 150g', '구운 채소', '퀴노아 80g'] }
   ];
 
-  // ============ INIT ============
   document.addEventListener('DOMContentLoaded', () => {
     initConfig();
     renderHero();
@@ -745,10 +1120,135 @@ permalink: /health/
     document.querySelector(`.h-nav-btn[data-tab="${tab}"]`).classList.add('active');
     document.getElementById('panel-' + tab).classList.add('active');
     if (tab === 'stats') renderStats();
+    if (tab === 'calendar') renderCalendar();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // ============ CONFIG ============
+  // ============ CALENDAR ============
+  let calCursor = new Date();
+  calCursor.setDate(1);
+
+  function changeCalMonth(delta) {
+    calCursor.setMonth(calCursor.getMonth() + delta);
+    renderCalendar();
+  }
+
+  function renderCalendar() {
+    const year = calCursor.getFullYear();
+    const month = calCursor.getMonth();
+    const monthNames = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+    document.getElementById('cal-month-label').textContent = `${year}년 ${monthNames[month]}`;
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const lastDate = new Date(year, month + 1, 0).getDate();
+    const today = new Date();
+    const todayKey = today.toISOString().slice(0,10);
+    const phase = getCurrentPhase();
+
+    // 요일별 운동 계획 (월=1, 일=0)
+    const planByDow = {
+      1: { type: 'workout', label: '가슴+삼두' },
+      2: { type: 'workout', label: '등+이두' },
+      3: { type: 'cardio', label: '유산소' },
+      4: { type: 'workout', label: '하체' },
+      5: { type: 'workout', label: '어깨+팔' },
+      6: { type: 'cardio', label: '유산소' },
+      0: { type: 'rest', label: '휴식' }
+    };
+
+    let html = '';
+    // 앞 빈칸
+    for (let i = 0; i < firstDay; i++) {
+      html += '<div class="h-cal-day empty"></div>';
+    }
+    // 날짜
+    for (let d = 1; d <= lastDate; d++) {
+      const date = new Date(year, month, d);
+      const dateKey = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      const dow = date.getDay();
+      const log = DATA.logs[dateKey] || {};
+      const plan = planByDow[dow];
+      const isFuture = date > today && dateKey !== todayKey;
+      const isToday = dateKey === todayKey;
+
+      const tk = (log.kcal?.breakfast||0)+(log.kcal?.lunch||0)+(log.kcal?.snack||0)+(log.kcal?.dinner||0);
+      const dietOk = tk > 0 && tk <= phase.kcal + 100;
+      const workoutDone = log.workout?.done;
+      const cardioDone = log.cardio?.done;
+      const weightLogged = !!log.weight;
+
+      // 완벽한 날 판정 (계획 따라)
+      let perfect = false;
+      if (!isFuture) {
+        if (plan.type === 'workout') {
+          perfect = workoutDone && dietOk && weightLogged;
+        } else if (plan.type === 'cardio') {
+          perfect = cardioDone && dietOk;
+        } else { // rest
+          perfect = dietOk;
+        }
+      }
+
+      const classes = ['h-cal-day'];
+      if (isToday) classes.push('today');
+      if (isFuture) classes.push('future');
+      if (perfect) classes.push('perfect');
+      if (plan.type === 'rest') classes.push('rest');
+
+      const numClass = dow === 0 ? 'sun' : dow === 6 ? 'sat' : '';
+
+      let dots = '';
+      if (workoutDone) dots += '<div class="h-cal-dot workout"></div>';
+      if (cardioDone) dots += '<div class="h-cal-dot cardio"></div>';
+      if (dietOk) dots += '<div class="h-cal-dot diet"></div>';
+      if (weightLogged) dots += '<div class="h-cal-dot weight"></div>';
+
+      html += `<div class="${classes.join(' ')}" onclick="openDay('${dateKey}')">
+        <div class="h-cal-day-num ${numClass}">${d}</div>
+        <div class="h-cal-dots">${dots}</div>
+      </div>`;
+    }
+    document.getElementById('cal-grid').innerHTML = html;
+
+    // 월간 요약
+    let mWorkout = 0, mCardio = 0, mDiet = 0, mWeight = 0;
+    for (let d = 1; d <= lastDate; d++) {
+      const dateKey = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      const log = DATA.logs[dateKey];
+      if (!log) continue;
+      const tk = (log.kcal?.breakfast||0)+(log.kcal?.lunch||0)+(log.kcal?.snack||0)+(log.kcal?.dinner||0);
+      if (log.workout?.done) mWorkout++;
+      if (log.cardio?.done) mCardio++;
+      if (tk > 0 && tk <= phase.kcal + 100) mDiet++;
+      if (log.weight) mWeight++;
+    }
+    document.getElementById('cal-summary').innerHTML = `
+      <div class="h-cal-sum-box">
+        <div class="h-cal-sum-val">${mWorkout}</div>
+        <div class="h-cal-sum-label">운동일</div>
+      </div>
+      <div class="h-cal-sum-box">
+        <div class="h-cal-sum-val">${mCardio}</div>
+        <div class="h-cal-sum-label">유산소</div>
+      </div>
+      <div class="h-cal-sum-box">
+        <div class="h-cal-sum-val">${mDiet}</div>
+        <div class="h-cal-sum-label">식단준수</div>
+      </div>
+      <div class="h-cal-sum-box">
+        <div class="h-cal-sum-val">${mWeight}</div>
+        <div class="h-cal-sum-label">체중기록</div>
+      </div>`;
+  }
+
+  function openDay(dateKey) {
+    goTab('tracker');
+    setTimeout(() => {
+      document.getElementById('log-date').value = dateKey;
+      loadLog();
+    }, 100);
+  }
+
   function initConfig() {
     document.getElementById('cfg-start-date').value = DATA.config.startDate;
     document.getElementById('cfg-start-weight').value = DATA.config.startWeight;
@@ -791,7 +1291,6 @@ permalink: /health/
     saveData(); location.reload();
   }
 
-  // ============ HERO ============
   function renderHero() {
     const cfg = DATA.config;
     const lastLog = getMostRecentLog();
@@ -826,9 +1325,10 @@ permalink: /health/
   }
 
   function renderTopTag() {
-    const wkday = ['SUN','MON','TUE','WED','THU','FRI','SAT'][new Date().getDay()];
+    const wkdays = ['일','월','화','수','목','금','토'];
+    const wkday = wkdays[new Date().getDay()];
     const phase = getCurrentPhase();
-    document.getElementById('top-tag').textContent = `${wkday} · P${phase.num}`;
+    document.getElementById('top-tag').textContent = `${wkday}요일 · Phase ${phase.num}`;
   }
 
   function getMostRecentLog() {
@@ -844,12 +1344,11 @@ permalink: /health/
     return { num: 3, name: '커팅', kcal: 1400, protein: 150 };
   }
 
-  // ============ WORKOUT ============
   function renderWorkouts() {
     ['chest','back','legs','shoulder'].forEach(k => {
       document.getElementById('w-' + k).innerHTML = WORKOUTS[k].map((ex, i) => `
         <div class="h-exer">
-          <div class="h-exer-num">${String(i+1).padStart(2,'0')}</div>
+          <div class="h-exer-num">${i+1}</div>
           <div class="h-exer-info">
             <div class="h-exer-name">${ex.name}</div>
             <div class="h-exer-muscle">${ex.muscle}</div>
@@ -859,13 +1358,12 @@ permalink: /health/
     });
   }
 
-  // ============ MEALS ============
   function renderMeals() {
     document.getElementById('meals-a').innerHTML = MEALS_A.map(mealHtml).join('');
     document.getElementById('meals-b').innerHTML = MEALS_B.map(mealHtml).join('');
     const phase = getCurrentPhase();
     document.getElementById('diet-phase-alert').textContent =
-      `PHASE ${phase.num} ${phase.name} — ${phase.kcal} kcal · 단백질 ${phase.protein}g`;
+      `Phase ${phase.num} ${phase.name} · ${phase.kcal} kcal · 단백질 ${phase.protein}g`;
   }
   function mealHtml(m) {
     return `<div class="h-meal">
@@ -877,17 +1375,16 @@ permalink: /health/
     </div>`;
   }
 
-  // ============ WEEK ============
   function renderWeek() {
     const wkday = new Date().getDay();
     const days = [
-      { l:'MON', c:'가슴<br>삼두' },
-      { l:'TUE', c:'등<br>이두' },
-      { l:'WED', c:'유산소', cardio:true },
-      { l:'THU', c:'하체' },
-      { l:'FRI', c:'어깨<br>팔' },
-      { l:'SAT', c:'유산소', cardio:true },
-      { l:'SUN', c:'휴식', rest:true }
+      { l:'월', c:'가슴<br>삼두' },
+      { l:'화', c:'등<br>이두' },
+      { l:'수', c:'유산소', cardio:true },
+      { l:'목', c:'하체' },
+      { l:'금', c:'어깨<br>팔' },
+      { l:'토', c:'유산소', cardio:true },
+      { l:'일', c:'휴식', rest:true }
     ];
     const todayIdx = wkday === 0 ? 6 : wkday - 1;
     document.getElementById('week-grid').innerHTML = days.map((d, i) => `
@@ -897,7 +1394,6 @@ permalink: /health/
       </div>`).join('');
   }
 
-  // ============ TRACKER ============
   function initTracker() {
     document.getElementById('log-date').value = new Date().toISOString().slice(0,10);
     loadLog();
@@ -932,10 +1428,9 @@ permalink: /health/
     renderHero();
     renderDashboard();
     showSummary(log);
-    // 가벼운 피드백
-    const btn = event.target;
+    const btn = document.getElementById('save-btn');
     const orig = btn.textContent;
-    btn.textContent = '✓ SAVED';
+    btn.textContent = '✓ 저장됨';
     setTimeout(() => btn.textContent = orig, 1200);
   }
 
@@ -943,8 +1438,9 @@ permalink: /health/
     const date = document.getElementById('log-date').value;
     const log = DATA.logs[date];
     document.querySelectorAll('#panel-tracker .h-check').forEach(c => c.classList.remove('checked'));
-    const fields = ['weight','water','notes'];
-    fields.forEach(f => document.getElementById('log-' + f).value = '');
+    document.getElementById('log-weight').value = '';
+    document.getElementById('log-water').value = '';
+    document.getElementById('log-notes').value = '';
     ['breakfast','lunch','snack','dinner'].forEach(k => document.getElementById('kcal-' + k).value = '');
     document.getElementById('workout-type').value = '';
     document.getElementById('cardio-min').value = '';
@@ -973,10 +1469,8 @@ permalink: /health/
     const tk = (log.kcal?.breakfast||0)+(log.kcal?.lunch||0)+(log.kcal?.snack||0)+(log.kcal?.dinner||0);
     const phase = getCurrentPhase();
     const diff = tk - phase.kcal;
-    const color = Math.abs(diff) > 200 ? '#ff5e5e' : 'var(--accent)';
     document.getElementById('log-summary').innerHTML =
-      `섭취 <b>${tk} kcal</b> / 목표 ${phase.kcal} ` +
-      `<span style="color:${color}">(${diff>=0?'+':''}${diff})</span>`;
+      `섭취 <b>${tk} kcal</b> / 목표 ${phase.kcal} (${diff>=0?'+':''}${diff})`;
     document.getElementById('log-summary').style.display = '';
   }
 
@@ -987,33 +1481,33 @@ permalink: /health/
     saveData(); loadLog(); renderHero(); renderDashboard();
   }
 
-  // ============ DASHBOARD ============
   function renderDashboard() {
     const phase = getCurrentPhase();
     const wk = new Date().getDay();
-    const wkday = ['SUN','MON','TUE','WED','THU','FRI','SAT'][wk];
+    const wkdays = ['일','월','화','수','목','금','토'];
+    const wkday = wkdays[wk];
     const plans = {
-      MON:{ what:'가슴 + 삼두', cardio:false, type:'workout' },
-      TUE:{ what:'등 + 이두', cardio:false, type:'workout' },
-      WED:{ what:'유산소 LISS 30-40분', cardio:true, type:'cardio' },
-      THU:{ what:'하체', cardio:false, type:'workout' },
-      FRI:{ what:'어깨 + 팔', cardio:false, type:'workout' },
-      SAT:{ what:'유산소 인터벌 40-50분', cardio:true, type:'cardio' },
-      SUN:{ what:'휴식 (가벼운 산책)', cardio:false, type:'rest' }
+      '월':{ what:'가슴 + 삼두', cardio:false, type:'workout' },
+      '화':{ what:'등 + 이두', cardio:false, type:'workout' },
+      '수':{ what:'유산소 LISS 30~40분', cardio:true, type:'cardio' },
+      '목':{ what:'하체', cardio:false, type:'workout' },
+      '금':{ what:'어깨 + 팔', cardio:false, type:'workout' },
+      '토':{ what:'유산소 인터벌 40~50분', cardio:true, type:'cardio' },
+      '일':{ what:'휴식 (가벼운 산책)', cardio:false, type:'rest' }
     };
     const todayPlan = plans[wkday];
 
     document.getElementById('today-info').innerHTML =
-      `${new Date().toISOString().slice(0,10)} · ${wkday} · ` +
-      `<span style="color:var(--accent);">PHASE ${phase.num} ${phase.name}</span>`;
+      `${new Date().toISOString().slice(0,10)} · ${wkday}요일 · ` +
+      `<b style="color:var(--h-accent-text);">Phase ${phase.num} ${phase.name}</b>`;
 
     document.getElementById('today-content').innerHTML = `
       <div class="h-today-box">
-        <div class="h-today-box-title">TRAINING</div>
+        <div class="h-today-box-title">운동</div>
         <div class="h-today-box-val">${todayPlan.what}</div>
       </div>
       <div class="h-today-box">
-        <div class="h-today-box-title">DIET</div>
+        <div class="h-today-box-title">식단</div>
         <div class="h-today-box-val">${phase.kcal} kcal · 단백질 ${phase.protein}g</div>
       </div>`;
 
@@ -1022,29 +1516,29 @@ permalink: /health/
     const tk = (tl.kcal?.breakfast||0)+(tl.kcal?.lunch||0)+(tl.kcal?.snack||0)+(tl.kcal?.dinner||0);
     const checks = [
       { label: '체중 기록', done: !!tl.weight },
-      { label: '아침', done: tl.meals?.breakfast },
-      { label: '점심', done: tl.meals?.lunch },
-      { label: '저녁', done: tl.meals?.dinner },
-      { label: todayPlan.type === 'rest' ? '휴식 (자동✓)' : `오늘 ${todayPlan.what}`,
+      { label: '아침 식사', done: tl.meals?.breakfast },
+      { label: '점심 식사', done: tl.meals?.lunch },
+      { label: '저녁 식사', done: tl.meals?.dinner },
+      { label: todayPlan.type === 'rest' ? '휴식' : `오늘 ${todayPlan.what}`,
         done: todayPlan.type === 'rest' ? true : (todayPlan.cardio ? tl.cardio?.done : tl.workout?.done) },
-      { label: '물 2L+', done: (tl.water || 0) >= 2 },
+      { label: '물 2L 이상', done: (tl.water || 0) >= 2 },
       { label: `섭취 ${tk}/${phase.kcal} kcal`, done: tk > 0 && tk <= phase.kcal + 100 }
     ];
     document.getElementById('today-checks').innerHTML = checks.map(c => `
       <div class="h-row">
         <div class="h-check ${c.done?'checked':''}" style="cursor:default;"></div>
-        <span style="flex:1;">${c.label}</span>
+        <span class="h-row-label">${c.label}</span>
       </div>`).join('');
 
     const dates = Object.keys(DATA.logs).sort().slice(-7).reverse();
     if (!dates.length) {
       document.getElementById('recent-7').innerHTML =
-        '<div style="color:var(--text2);font-size:0.88em;text-align:center;padding:14px;">기록 없음 · LOG에서 시작</div>';
+        '<div style="color:var(--h-text2);font-size:13px;text-align:center;padding:20px;">기록을 시작해보세요</div>';
     } else {
       document.getElementById('recent-7').innerHTML = dates.map(d => {
         const l = DATA.logs[d];
         const k = (l.kcal?.breakfast||0)+(l.kcal?.lunch||0)+(l.kcal?.snack||0)+(l.kcal?.dinner||0);
-        return `<div class="h-hist-item" onclick="goTab('tracker');setTimeout(()=>{document.getElementById('log-date').value='${d}';loadLog();},100)" style="cursor:pointer;">
+        return `<div class="h-hist-item" onclick="goTab('tracker');setTimeout(()=>{document.getElementById('log-date').value='${d}';loadLog();},100)">
           <div class="h-hist-date">${d.slice(5)}</div>
           <div class="h-hist-info">${l.weight ? l.weight+'kg' : '-'} · ${k||'-'} kcal</div>
           <div class="h-hist-icon">${l.workout?.done?'🏋️':''}${l.cardio?.done?'🏃':''}</div>
@@ -1053,11 +1547,13 @@ permalink: /health/
     }
   }
 
-  // ============ STATS ============
   let weightChart = null;
   function renderStats() {
     const dates = Object.keys(DATA.logs).filter(d => DATA.logs[d].weight).sort();
     const weights = dates.map(d => DATA.logs[d].weight);
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const textColor = isDark ? '#9ca3af' : '#6b7280';
+    const gridColor = isDark ? '#2a2d35' : '#e5e7eb';
 
     if (weightChart) weightChart.destroy();
     weightChart = new Chart(document.getElementById('weight-chart'), {
@@ -1065,19 +1561,20 @@ permalink: /health/
       data: {
         labels: dates.map(d => d.slice(5)),
         datasets: [
-          { label: '체중', data: weights, borderColor: '#00ff41',
-            backgroundColor: 'rgba(0,255,65,0.15)', tension: 0.3, fill: true,
-            pointRadius: 3, borderWidth: 2 },
+          { label: '체중', data: weights, borderColor: '#10b981',
+            backgroundColor: 'rgba(16, 185, 129, 0.15)', tension: 0.35, fill: true,
+            pointRadius: 4, pointBackgroundColor: '#10b981',
+            pointBorderColor: '#fff', pointBorderWidth: 2, borderWidth: 2.5 },
           { label: '목표', data: dates.map(() => DATA.config.goalWeight),
-            borderColor: '#888', borderDash: [5,5], pointRadius: 0, fill: false, borderWidth: 1 }
+            borderColor: textColor, borderDash: [5,5], pointRadius: 0, fill: false, borderWidth: 1.5 }
         ]
       },
       options: {
         responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { labels: { color: '#888898', font: { size: 11 } } } },
+        plugins: { legend: { labels: { color: textColor, font: { size: 12, family: 'Pretendard' } } } },
         scales: {
-          x: { ticks: { color: '#888898', font: { size: 10 } }, grid: { color: '#2a2a3a' } },
-          y: { ticks: { color: '#888898', font: { size: 10 } }, grid: { color: '#2a2a3a' } }
+          x: { ticks: { color: textColor, font: { family: 'Pretendard' } }, grid: { color: gridColor } },
+          y: { ticks: { color: textColor, font: { family: 'Pretendard' } }, grid: { color: gridColor } }
         }
       }
     });
@@ -1085,14 +1582,14 @@ permalink: /health/
     const all = Object.keys(DATA.logs).sort().reverse();
     if (!all.length) {
       document.getElementById('history-list').innerHTML =
-        '<div style="color:var(--text2);font-size:0.88em;text-align:center;padding:14px;">기록 없음</div>';
-      document.getElementById('compliance').innerHTML = '<span style="color:var(--text2);">기록 시작 후 표시</span>';
+        '<div style="color:var(--h-text2);font-size:13px;text-align:center;padding:20px;">기록 없음</div>';
+      document.getElementById('compliance').innerHTML = '<span style="color:var(--h-text2);">기록 시작 후 표시됩니다</span>';
       return;
     }
     document.getElementById('history-list').innerHTML = all.map(d => {
       const l = DATA.logs[d];
       const k = (l.kcal?.breakfast||0)+(l.kcal?.lunch||0)+(l.kcal?.snack||0)+(l.kcal?.dinner||0);
-      return `<div class="h-hist-item">
+      return `<div class="h-hist-item" onclick="goTab('tracker');setTimeout(()=>{document.getElementById('log-date').value='${d}';loadLog();},100)">
         <div class="h-hist-date">${d.slice(5)}</div>
         <div class="h-hist-info">${l.weight||'-'}kg · ${k||'-'} kcal · ${l.workout?.type||''}</div>
         <div class="h-hist-icon">${l.workout?.done?'🏋️':''}${l.cardio?.done?'🏃':''}</div>
