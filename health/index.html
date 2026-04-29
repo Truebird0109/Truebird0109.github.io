@@ -1151,8 +1151,27 @@ permalink: /health/
     saveData();
   }
 
+  // 2026-04-29 오늘 실제 기록 (한 번만)
+  function applyTodayLog20260429() {
+    if (DATA.config.todayLog20260429Applied) return;
+    const d = '2026-04-29';
+    DATA.logs[d] = Object.assign(DATA.logs[d] || {}, {
+      date: d,
+      weight: DATA.logs[d]?.weight ?? null,
+      water: DATA.logs[d]?.water ?? null,
+      meals: { breakfast: true, lunch: true, snack: true, dinner: false },
+      kcal: { breakfast: 477, lunch: 456, snack: 309, dinner: 0 },
+      workout: { done: true, type: 'back' },
+      cardio: DATA.logs[d]?.cardio ?? { done: false, min: 0 },
+      notes: '등+이두 완료. 운동 전 고구마 1개 + 바나나 2개'
+    });
+    DATA.config.todayLog20260429Applied = true;
+    saveData();
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     applyWeekDefaults();
+    applyTodayLog20260429();
     initConfig();
     renderHero();
     renderTopTag();
