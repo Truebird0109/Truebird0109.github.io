@@ -1151,6 +1151,27 @@ permalink: /health/
     saveData();
   }
 
+  // 2026-04-30 인바디 체중 기록 (한 번만)
+  function applyInbody20260430() {
+    if (DATA.config.inbody20260430Applied) return;
+    const d = '2026-04-30';
+    if (!DATA.logs[d]) {
+      DATA.logs[d] = {
+        date: d, weight: null, water: null,
+        meals: {}, kcal: {},
+        workout: { done: false, type: null },
+        cardio: { done: false, min: 0 },
+        notes: ''
+      };
+    }
+    DATA.logs[d].weight = 71.0;
+    if (!DATA.logs[d].notes) DATA.logs[d].notes = '';
+    DATA.logs[d].notes = ('인바디: 체중 71.0kg / 체지방률 24.9% / 체지방량 17.7kg / 골격근량 29.9kg' +
+      (DATA.logs[d].notes ? '\n' + DATA.logs[d].notes : ''));
+    DATA.config.inbody20260430Applied = true;
+    saveData();
+  }
+
   // 2026-04-29 오늘 실제 기록 (한 번만)
   function applyTodayLog20260429() {
     if (DATA.config.todayLog20260429Applied) return;
@@ -1172,6 +1193,7 @@ permalink: /health/
   document.addEventListener('DOMContentLoaded', () => {
     applyWeekDefaults();
     applyTodayLog20260429();
+    applyInbody20260430();
     initConfig();
     renderHero();
     renderTopTag();
@@ -1375,8 +1397,8 @@ permalink: /health/
     document.getElementById('progress-pct').textContent = pct.toFixed(0) + '%';
     document.getElementById('progress-fill').style.width = pct + '%';
 
-    const muscle = 30.0;
-    const other = cfg.startWeight - 18.0 - muscle;
+    const muscle = 29.9;
+    const other = cfg.startWeight - 17.7 - muscle;
     const bfMass = Math.max(0, cur - muscle - other);
     document.getElementById('hero-bf').textContent = ((bfMass / cur) * 100).toFixed(1) + '%';
   }
